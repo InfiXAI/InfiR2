@@ -10,11 +10,11 @@ source "${SCRIPT_DIR}/models/qwen2.5-7B.sh"
 # ================= user config ===============================
 HOME_DIR=/path/to/slime
 LOG_DIR=/path/to/wandb_log_dir/
-LOAD_DIR=/path/to/load_dir_InfiR2_SFT_FP8_stg1/
-SAVE_DIR=/path/to/save_dir_InfiR2_SFT_FP8_stg1/
-DATA_DIR=/path/to/stage1_data
-HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B/
-REF_LOAD=/path/to/base_models_/qwen2.5-7B_torch_dist/
+LOAD_DIR=/path/to/load_dir_InfiR2_SFT_FP8_7B_stg2/
+SAVE_DIR=/path/to/save_dir_InfiR2_SFT_FP8_7B_stg2/
+DATA_DIR=/path/to/stage2_data
+HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B-Instruct/
+REF_LOAD=/path/to/base_models_/InfiR2_SFT_FP8_7B_stg1_torch_dist/
 # ==============================================================
 
 # ================ paralle config ==============================
@@ -81,8 +81,8 @@ WANDB_ARGS=(
    --use-wandb
    --wandb-mode offline
    --wandb-project slime-dev
-   --wandb-group InfiR2-sft-fp8-stg1
-   --wandb-dir ${LOG_DIR}/InfiR2-sft-fp8-stg1__wandb
+   --wandb-group InfiR2-sft-fp8-7B-stg2
+   --wandb-dir ${LOG_DIR}/InfiR2-sft-fp8-7B-stg2__wandb
    # --wandb-key ${WANDB_KEY}
 )
 
@@ -110,7 +110,7 @@ TENSORBOARD_ARGS=(
    --use-pytorch-profiler
    --profile-step-start 16
    --profile-step-end 18
-   --tensorboard-dir ${LOG_DIR}/tensorboard/InfiR2-sft-fp8-stg1
+   --tensorboard-dir ${LOG_DIR}/tensorboard/InfiR2-sft-fp8-7B-stg2
    --record-memory-history
 )
 

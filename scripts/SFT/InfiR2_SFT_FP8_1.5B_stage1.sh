@@ -4,21 +4,21 @@ export PYTHONBUFFERED=16
 
 # ================== model config =============================
 SCRIPT_DIR=/path/to/slime/scripts
-source "${SCRIPT_DIR}/models/qwen2.5-7B.sh"
+source "${SCRIPT_DIR}/models/qwen2.5-1.5B.sh"
 # =============================================================
 
 # ================= user config ===============================
 HOME_DIR=/path/to/slime
 LOG_DIR=/path/to/wandb_log_dir/
-LOAD_DIR=/path/to/load_dir_InfiR2_SFT_FP8_stg2/
-SAVE_DIR=/path/to/save_dir_InfiR2_SFT_FP8_stg2/
+LOAD_DIR=/path/to/load_dir_InfiR2_SFT_FP8_1.5B_stg1/
+SAVE_DIR=/path/to/save_dir_InfiR2_SFT_FP8_1.5B_stg1/
 DATA_DIR=/path/to/stage1_data
-HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B/
-REF_LOAD=/path/to/base_models_/InfiR2_stg2_torch_dist/
+HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-1.5B-Instruct/
+REF_LOAD=/path/to/base_models_/qwen2.5-1.5B_torch_dist/
 # ==============================================================
 
 # ================ paralle config ==============================
-TP=4
+TP=2
 PP=1
 CP=1
 EP_MP=1
@@ -68,9 +68,9 @@ PERF_ARGS=(
 
 OPTIMIZER_ARGS=(
    --optimizer adam
-   --lr 2e-5
+   --lr 5e-5
    --lr-decay-style cosine
-   --min-lr 2e-6
+   --min-lr 5e-6
    --lr-warmup-fraction 0.05
    --weight-decay 0
    --adam-beta1 0.9
@@ -81,8 +81,8 @@ WANDB_ARGS=(
    --use-wandb
    --wandb-mode offline
    --wandb-project slime-dev
-   --wandb-group InfiR2-sft-fp8-stg2
-   --wandb-dir ${LOG_DIR}/InfiR2-sft-fp8-stg2__wandb
+   --wandb-group InfiR2-sft-fp8-1.5B-stg1
+   --wandb-dir ${LOG_DIR}/InfiR2-sft-fp8-1.5B-stg1__wandb
    # --wandb-key ${WANDB_KEY}
 )
 
@@ -110,7 +110,7 @@ TENSORBOARD_ARGS=(
    --use-pytorch-profiler
    --profile-step-start 16
    --profile-step-end 18
-   --tensorboard-dir ${LOG_DIR}/tensorboard/InfiR2-sft-fp8-stg2
+   --tensorboard-dir ${LOG_DIR}/tensorboard/InfiR2-sft-fp8-1.5B-stg1
    --record-memory-history
 )
 

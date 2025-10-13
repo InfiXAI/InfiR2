@@ -171,15 +171,10 @@ DATA_DIR=/path/to/data/dapo-math-17k.jsonl
 - `HF_CHECKPOINT`: Path to the FP8 E8M0 converted model (for inference)
 - `REF_LOAD`: Path to the SFT Stage 2 checkpoint in PyTorch distributed format
 
-Example:
 ```bash
 HF_CHECKPOINT=/path/to/InfiR2_SFT_FP8_stg2_hf_e8m0/
 REF_LOAD=/path/to/InfiR2_SFT_FP8_stg2/
 ```
-
-**Key Parameters:**
-- `ROLLOUT_MAX_RESPONSE_LEN=8192`: Response length limit for Stage 1
-- `MAX_TOKENS_PER_GPU=8192`: Memory-efficient token packing
 
 #### Running 🚀
 The way to launch RL training is the same as SFT. First start ray and then run the script.
@@ -214,10 +209,12 @@ pip install -e .
 
 We provide evaluation scripts for four key reasoning benchmarks:
 
-1. **AIME 2024** - [aime24_eval.sh](eval/aime24_eval.sh)
-2. **AIME 2025** - [aime25_eval.sh](eval/aime25_eval.sh)
-3. **GPQA Diamond** - [gpqa_eval.sh](eval/gpqa_eval.sh)
-4. **LiveCodeBench v5** - [livecodebenchv5_eval.sh](eval/livecodebenchv5_eval.sh)
+| Benchmark | Script | Max Tokens | Samples | Temperature |
+|-----------|--------|------------|---------|-------------|
+| AIME 2024 | [aime24_eval.sh](eval/aime24_eval.sh) | 31,000 | 32 | 0.65 |
+| AIME 2025 | [aime25_eval.sh](eval/aime25_eval.sh) | 31,000 | 32 | 0.65 |
+| GPQA | [gpqa_eval.sh](eval/gpqa_eval.sh) | 26,000 | 8 | 0.65 |
+| LiveCodeBench | [livecodebenchv5_eval.sh](eval/livecodebenchv5_eval.sh) | 27,000 | 8 | 0.65 |
 
 ### Running Evaluations
 
@@ -226,28 +223,6 @@ Each script uses SLURM for job scheduling and SGLang for efficient inference ser
 1. Starting an SGLang server with the model
 2. Running evalscope with the specified benchmark
 3. Automatically collecting and logging results
-
-**Example: Evaluating on AIME 2024**
-
-```bash
-# Configure the script with your paths
-# Edit eval/aime24_eval.sh to set:
-# - MODEL_PATH: /path/to/your/InfiR2_model
-# - DATASET_LOCAL: /path/to/aime_2024
-# - Other necessary paths
-
-# Submit the evaluation job
-sbatch eval/aime24_eval.sh
-```
-
-**Key Evaluation Parameters by Benchmark:**
-
-| Benchmark | Script | Max Tokens | Samples | Temperature |
-|-----------|--------|------------|---------|-------------|
-| AIME 2024 | [aime24_eval.sh](eval/aime24_eval.sh) | 31,000 | 32 | 0.65 |
-| AIME 2025 | [aime25_eval.sh](eval/aime25_eval.sh) | 31,000 | 32 | 0.65 |
-| GPQA | [gpqa_eval.sh](eval/gpqa_eval.sh) | 26,000 | 8 | 0.65 |
-| LiveCodeBench | [livecodebenchv5_eval.sh](eval/livecodebenchv5_eval.sh) | 27,000 | 8 | 0.65 |
 
 
 ## 🙏 Acknowledgements
