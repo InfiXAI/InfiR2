@@ -3,7 +3,7 @@
 NNODES=1
 RDZV_ENDPOINT="localhost:29400"
 
-# 创建一个数组存储其他参数
+
 ARGS=()
 
 # 解析所有参数
