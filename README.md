@@ -245,7 +245,7 @@ If you find our work useful, please cite:
 ```bibtex
 @misc{wang2025infir2comprehensivefp8training,
       title={InfiR2: A Comprehensive FP8 Training Recipe for Reasoning-Enhanced Language Models}, 
-      author={Wenjun Wang and Shuo Cai and Congkai Xie and Mingfa Feng and Yiming Zhang and Zhen Li and Kejing Yang and Ming Li and Jiannong Cao and Yuan Xie and Hongxia Yang},
+      author={Wenjun Wang and Shuo Cai and Congkai Xie and Mingfa Feng and Yiming Zhang and Zhen Li and Kejing Yang and Ming Li and Jiannong Cao and Hongxia Yang},
       year={2025},
       eprint={2509.22536},
       archivePrefix={arXiv},
