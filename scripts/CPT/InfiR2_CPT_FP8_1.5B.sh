@@ -6,7 +6,6 @@ RDZV_ENDPOINT="localhost:29400"
 
 ARGS=()
 
-# 解析所有参数
 while [[ $# -gt 0 ]]; do
     case $1 in
         --nnodes)
@@ -18,7 +17,6 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         *)
-            # 将其他参数添加到数组中
             ARGS+=("$1")
             shift
             ;;
@@ -199,7 +197,6 @@ EXE=${CODE_DIR}/pretrain_gpt.py
 
 torchrun $DISTRIBUTED_ARGS ${EXE} \
     $DATA_ARGS \
-    $OUTPUT_ARGS \
     $MODEL_PARALLEL_ARGS \
     $MODEL_ARGS \
     $EVAL_AND_LOGGING_ARGS \
