@@ -6,22 +6,23 @@
 </p>
 
 <p align="center">
-  <a href="https://zeyu-zhu.github.io/webpage/">Wenjun Wang*</a>,
-  <a href="https://qhlin.me/">Shuo Cai*</a>,
-  <a href="https://scholar.google.com/citations?user=h1-3lSoAAAAJ&hl=en">Congkai Xie</a> <br>
+  <a href="https://scholar.google.com/citations?hl=zh-CN&user=1LA3TSAAAAAJ">Wenjun Wang*</a>,
+  <a href="https://scholar.google.com/citations?user=VRlUiqQAAAAJ">Shuo Cai*</a>,
+  <a href="https://scholar.google.com/citations?user=I6SAtGMAAAAJ&hl=en">Congkai Xie</a>, Mingfa Feng, Yiming Zhang, Zhen Li, Kejing Yang, Ming Li, Jiannong Cao, Hongxia Yang <br>
+
 </p>
 
 
 <p align="center">
   <a href="https://arxiv.org/abs/2509.22536">📄 Paper</a> &nbsp; | &nbsp;
-  <a href="https://huggingface.co/datasets/ZaynZhu/Paper2Video">📊 Dataset</a> &nbsp; | &nbsp;
-  <a href="https://showlab.github.io/Paper2Video/">🌐 Project Website</a> &nbsp; | &nbsp;
+  <a href="https://huggingface.co/datasets/ZaynZhu/Paper2Video">🤗 Huggingface </a> &nbsp; | &nbsp;
+  <a href="https://infix-ai.com/research/infir2/">🌐 Project Website</a> &nbsp; | &nbsp;
 </p>
 
 
 
 ## 🔥 Update
-- [x] [2025.10.8] We release the [code](https://github.com/showlab/Paper2Video) and [model](https://huggingface.co/datasets/ZaynZhu/Paper2Video).
+- [x] [2025.10.8] We release the [code](https://github.com/InfiXAI/InfiR2) and [model](https://huggingface.co/datasets/ZaynZhu/Paper2Video).
 - [x] [2025.9.26] We release the [arxiv paper](https://arxiv.org/abs/2509.22536).
 
 ---
@@ -43,7 +44,7 @@
 We introduce an end-to-end FP8 training recipe that seamlessly integrates continual pre-training and supervised fine-tuning. Our methodology employs a fine-grained, hybrid-granularity quantization strategy to maintain numerical fidelity while maximizing computational efficiency. Through extensive experiments, including the continue pre-training of models on a 160B-token corpus, we demonstrate that our recipe is not only remarkably stable but also essentially lossless, achieving performance on par with the BF16 baseline across a suite of reasoning benchmarks. Crucially, this is achieved with substantial efficiency improvements, including up to a 22% reduction in training time, a 14% decrease in peak memory usage, and a 19% increase in throughput. Our results establish FP8 as a practical and robust alternative to BF16, and we will release the accompanying code to further democratize large-scale model training.
 
 <div align="center">
-  <img src="https://github.com/InfiXAI/InfiR2/blob/main/figures/fp8_recipe.pdf" alt="Our approach" width="100%">
+  <img src="assets/fp8_recipe.png" alt="Our approach" width="100%">
 </div>
 
 
@@ -53,48 +54,47 @@ We introduce an end-to-end FP8 training recipe that seamlessly integrates contin
 
 ### Environment Setup
 
-写一个requirments，包含conda环境
+We support environment setup via **Conda** and **Docker**. Both methods are based on the official setup guide from the [THUDM/slime](https://github.com/THUDM/slime) repository. Please follow the instructions in the links below.
 
-包括git clone 代码 + pip install 环境
+---
 
+### Option 1: Conda Setup
 
-设置megatron和transformer_engine的路径
+*   **Instructions**: Please follow the detailed guide at [**THUDM/slime Conda Build Documentation**](https://github.com/THUDM/slime/blob/main/docs/README.md).
+
+---
+
+### Option 2: Docker Setup
+
+*   **Instructions**: Please refer to the official Docker configuration files and guide at [**THUDM/slime Docker Directory**](https://github.com/THUDM/slime/tree/main/docker).
+
+To clone this repository, please use:
 ```bash
-
-export PROJECT_ROOT=$(pwd)
-
-export PYTHONPATH=${PROJECT_ROOT}/third_party/megatron:${PROJECT_ROOT}/third_party/transformer_engine:$PYTHONPATH
+git clone --recursive https://github.com/InfiXAI/InfiR2
 ```
-
 
 
 ## 🤖 Pretrain with FP8
 
-写运行脚本的位置
+We provide continue pretraining scripts with FP8 quantization.
 
-#### Dataset
+- 7B CPT
+  - warmup and stable: [InfiR2_CPT_FP8_7B.sh](scripts/CPT/InfiR2_CPT_FP8_7B.sh).
+  - decay: [InfiR2_CPT_FP8_7B_decay.sh](scripts/CPT/InfiR2_CPT_FP8_7B_decay.sh).
+- 1.5B CPT
+  - warmup and stable: [InfiR2_CPT_FP8_1.5B.sh](scripts/CPT/InfiR2_CPT_FP8_1.5B.sh).
+  - decay: [InfiR2_CPT_FP8_1.5B_decay.sh](scripts/CPT/InfiR2_CPT_FP8_1.5B_decay.sh).
 
-具体修改数据集中哪个位置
+#### Configuration
 
-#### Model
+Please modify the desired parameter directly within the script; all configurable parameters are defined there. 
 
-具体脚本中修改哪个位置
 
-#### Example Usage
+#### Running
 
-Run the following command to launch a full generation:
 
 ```bash
-python pipeline.py \
-    --model_name_t gpt-4.1 \
-    --model_name_v gpt-4.1 \
-    --model_name_talking hallo2 \
-    --result_dir /path/to/output \
-    --paper_latex_root /path/to/latex_proj \
-    --ref_img /path/to/ref_img.png \
-    --ref_audio /path/to/ref_audio.wav \
-    --talking_head_env /path/to/hallo2_env \
-    --gpu_list [0,1,2,3,4,5,6,7]
+bash InfiR2_CPT_FP8_7B.sh --nodes N --rdzv_endpoint master_ip:master_port
 ```
 
 ## 🌈 Supervised Fine-tuning with FP8
@@ -119,11 +119,12 @@ DATA_DIR=/path/to/stage1_data
 - `HF_CHECKPOINT`: Path to the base model in HuggingFace format (e.g., Qwen2.5-7B)
 - `REF_LOAD`: Path to the base model weights in PyTorch distributed format
 
+
 ```bash
 HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B/
 REF_LOAD=/path/to/base_models_/qwen2.5-7B_torch_dist/
 ```
-#### Running 🚀
+#### Running
 First, start Ray cluster:
 ```bash
 ray start --head --node-ip-address ${MASTER_ADDR} --num-gpus 8 --disable-usage-stats --dashboard-host=0.0.0.0 --dashboard-port=8265
@@ -146,7 +147,7 @@ After completing SFT Stage 2, convert the model to HuggingFace format, then to F
 
 ```bash
 # Step 1: Convert PyTorch distributed checkpoint to HuggingFace format
-PYTHONPATH=/root/Megatron-LM:/root/slime python tools/convert_torch_dist_to_hf.py \
+PYTHONPATH=training/Megatron-LM:training/slime python tools/convert_torch_dist_to_hf.py \
     --input-dir /path/to/InfiR2_SFT_FP8_stg2 \
     --output-dir /path/to/InfiR2_SFT_FP8_stg2_hf \
     --origin-hf-dir /path/to/models/Qwen2.5-7B
@@ -179,7 +180,7 @@ HF_CHECKPOINT=/path/to/InfiR2_SFT_FP8_stg2_hf_e8m0/
 REF_LOAD=/path/to/InfiR2_SFT_FP8_stg2/
 ```
 
-#### Running 🚀
+#### Running 
 The way to launch RL training is the same as SFT. First start ray and then run the script.
 
 This curriculum-based strategy ensures stable training and optimal performance across different response length requirements.
@@ -221,19 +222,14 @@ We provide evaluation scripts for four key reasoning benchmarks:
 
 ### Running Evaluations
 
-Each script uses SLURM for job scheduling and SGLang for efficient inference serving. The evaluation pipeline consists of:
+Each script uses slurm for job scheduling and SGLang for efficient inference serving. The evaluation pipeline consists of:
 
 1. Starting an SGLang server with the model
 2. Running evalscope with the specified benchmark
 
 ## 🙏 Acknowledgements
 
-* The souces of the presentation videos are SlideLive and YouTuBe.
-* We thank all the authors who spend a great effort to create presentation videos!
-* We thank [CAMEL](https://github.com/camel-ai/camel) for open-source well-organized multi-agent framework codebase.
-* We thank the authors of [Hallo2](https://github.com/fudan-generative-vision/hallo2.git) and [Paper2Poster](https://github.com/Paper2Poster/Paper2Poster.git) for their open-sourced codes.
-* We thank [Wei Jia](https://github.com/weeadd) for his effort in collecting the data and implementing the baselines. We also thank all the participants involved in the human studies.
-* We thank all the **Show Lab @ NUS** members for support!
+* We would like to express our gratitude for the following open-source projects: [Slime](https://github.com/THUDM/slime), [Megatron](https://github.com/NVIDIA/Megatron-LM), [TransformerEngine](https://github.com/NVIDIA/TransformerEngine) and [Qwen2.5](https://github.com/QwenLM/Qwen2.5-Math)。
 
 ---
 
