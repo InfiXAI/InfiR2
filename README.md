@@ -74,27 +74,18 @@ export PYTHONPATH=${PROJECT_ROOT}/third_party/megatron:${PROJECT_ROOT}/third_par
 
 #### Dataset
 
-具体修改数据集中哪个位置
+见运行脚本
 
 #### Model
 
-具体脚本中修改哪个位置
+--load
 
 #### Example Usage
 
 Run the following command to launch a full generation:
 
 ```bash
-python pipeline.py \
-    --model_name_t gpt-4.1 \
-    --model_name_v gpt-4.1 \
-    --model_name_talking hallo2 \
-    --result_dir /path/to/output \
-    --paper_latex_root /path/to/latex_proj \
-    --ref_img /path/to/ref_img.png \
-    --ref_audio /path/to/ref_audio.wav \
-    --talking_head_env /path/to/hallo2_env \
-    --gpu_list [0,1,2,3,4,5,6,7]
+python xxx.sh --nodes N --rdzv_endpoint master_ip:master_port 其他参数
 ```
 
 ## 🌈 Supervised Fine-tuning with FP8
