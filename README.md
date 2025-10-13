@@ -101,9 +101,12 @@ python pipeline.py \
 
 We provide two-stage SFT training scripts with FP8 quantization following [InfiAlign](https://arxiv.org/abs/2508.05496). The training process uses Ray for distributed execution and supports multi-node training configurations.
 
-- SFT Stage1: [InfiR2_SFT_FP8_stage1.sh](scripts/SFT/InfiR2_SFT_FP8_stage1.sh).
-
-- SFT Stage2: [InfiR2_SFT_FP8_stage2.sh](scripts/SFT/InfiR2_SFT_FP8_stage2.sh).
+- 7B SFT
+  - Stage1: [InfiR2_SFT_FP8_7B_stage1.sh](scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh).
+  - Stage2: [InfiR2_SFT_FP8_7B_stage2.sh](scripts/SFT/InfiR2_SFT_FP8_7B_stage2.sh).
+- 1.5B SFT
+  - Stage1: [InfiR2_SFT_FP8_1.5B_stage1.sh](scripts/SFT/InfiR2_SFT_FP8_1.5B_stage1.sh).
+  - Stage2: [InfiR2_SFT_FP8_1.5B_stage2.sh](scripts/SFT/InfiR2_SFT_FP8_1.5B_stage2.sh).
 
 #### Configuration
 
@@ -157,8 +160,8 @@ python tools/bf16_cast_fp8.py \
 
 The FP8 E8M0 model will be used for inference during the RL rollout phase, significantly improving generation efficiency.
 
-- Stage 1: [InfiR2_RL_FP8_stage1_4node.sh](scripts/RL/InfiR2_RL_FP8_stage1_4node.sh) with 8K response lengths.
-- Stage 2: [InfiR2_RL_FP8_stage2_4node.sh](scripts/RL/InfiR2_RL_FP8_stage2_4node.sh) with 8K response lengths and higher temperature.
+- Stage 1: [InfiR2_RL_FP8_7B_stage1_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage1_4node.sh) with 8K response lengths.
+- Stage 2: [InfiR2_RL_FP8_7B_stage2_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh) with 8K response lengths and higher temperature.
 
 #### Configuration
 
@@ -211,10 +214,10 @@ We provide evaluation scripts for four key reasoning benchmarks:
 
 | Benchmark | Script | Max Tokens | Samples | Temperature |
 |-----------|--------|------------|---------|-------------|
-| AIME 2024 | [aime24_eval.sh](eval/aime24_eval.sh) | 31,000 | 32 | 0.65 |
-| AIME 2025 | [aime25_eval.sh](eval/aime25_eval.sh) | 31,000 | 32 | 0.65 |
-| GPQA | [gpqa_eval.sh](eval/gpqa_eval.sh) | 26,000 | 8 | 0.65 |
-| LiveCodeBench | [livecodebenchv5_eval.sh](eval/livecodebenchv5_eval.sh) | 27,000 | 8 | 0.65 |
+| AIME 2024 | [aime24_eval.sh](scripts/eval/aime24_eval.sh) | 31,000 | 32 | 0.65 |
+| AIME 2025 | [aime25_eval.sh](scripts/eval/aime25_eval.sh) | 31,000 | 32 | 0.65 |
+| GPQA | [gpqa_eval.sh](scripts/eval/gpqa_eval.sh) | 26,000 | 8 | 0.65 |
+| LiveCodeBench | [livecodebenchv5_eval.sh](scripts/eval/livecodebenchv5_eval.sh) | 27,000 | 8 | 0.65 |
 
 ### Running Evaluations
 
@@ -222,8 +225,6 @@ Each script uses SLURM for job scheduling and SGLang for efficient inference ser
 
 1. Starting an SGLang server with the model
 2. Running evalscope with the specified benchmark
-3. Automatically collecting and logging results
-
 
 ## 🙏 Acknowledgements
 
