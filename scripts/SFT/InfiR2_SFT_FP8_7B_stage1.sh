@@ -14,7 +14,7 @@ LOAD_DIR=/path/to/load_dir_InfiR2_SFT_FP8_7B_stg1/
 SAVE_DIR=/path/to/save_dir_InfiR2_SFT_FP8_7B_stg1/
 DATA_DIR=/path/to/stage1_data
 HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B-Instruct/
-REF_LOAD=/path/to/base_models_/qwen2.5-7B_torch_dist/
+REF_LOAD=/path/to/base_models_/InfiR2_CPT_FP8_7B_torch_dist/
 # ==============================================================
 
 # ================ paralle config ==============================

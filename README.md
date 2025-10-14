@@ -116,7 +116,7 @@ For more details, please refer to [Pretrain.md](docs/Pretrain.md)
 
 ## 🌈 Supervised Fine-tuning with FP8
 
-We provide two-stage SFT training scripts with FP8 quantization following [InfiAlign](https://arxiv.org/abs/2508.05496). The training process uses Ray for distributed execution and supports multi-node training configurations.
+We provide two-stage SFT training scripts with FP8 quantization following [InfiAlign](https://arxiv.org/abs/2508.05496). The training process uses Ray for distributed execution and supports multi-node training configurations. For more details, refer to [docs/SFT.md](docs/SFT.md).
 
 - 7B SFT
   - Stage1: [InfiR2_SFT_FP8_7B_stage1.sh](scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh).
@@ -149,14 +149,14 @@ ray start --head --node-ip-address ${MASTER_ADDR} --num-gpus 8 --disable-usage-s
 
 Then launch the training:
 ```bash
-bash scripts/SFT/InfiR2_SFT_FP8_stage1.sh
+bash scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh
 ```
 
 ---
 
 ## 🎯 Reinforcement Learning with FP8
 
-Our RL training pipeline consists of two stages: first compressing the response length, then expanding it. Before RL training, you need to convert the SFT checkpoint to FP8 E8M0 format for efficient FP8 inference during rollout generation.
+Our RL training pipeline consists of two stages: first compressing the response length, then expanding it. Before RL training, you need to convert the SFT checkpoint to FP8 E8M0 format for efficient FP8 inference during rollout generation. For more details, refer to [docs/RL.md](docs/RL.md).
 
 ### Model Conversion for RL
 
