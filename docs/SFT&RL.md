@@ -55,6 +55,6 @@ RL scripts (`scripts/RL/`) target nodes × eight GPUs with `--colocate`. Stage 1
 GRPO (`--advantage-estimator grpo`) handles policy updates. KL/entropy terms default to zero; enable as needed via `--use-kl-loss`, `--kl-loss-type low_var_kl` (For reference only, KL loss is not used in training). Optimizer: Adam lr=1e-6, constant schedule, β1=0.9, β2=0.98, weight decay 0.1. Backprop remains BF16 (`PRECISE_ARGS` keeps only `--bf16`); inference leverages the FP8 E8M0 checkpoint with `--rollout-num-gpus-per-engine 4`. Adjust length penalties or `OVER_SAMPLING_BATCH_SIZE` to trade throughput vs memory.
 
 ### Operations & Monitoring
-Rerunning the same script will automatically reproduce the results. Stick to the EvalScope revision cited in the README (PR #734) for comparable metrics. Validate Stage 1/2 RL checkpoints on AIME24, AIME25, GPQA, LiveCodeBench v5 to confirm FP8 inference parity.
+Rerunning the same script will automatically reproduce the results. Stick to the EvalScope revision cited in the README [PR #734](https://github.com/modelscope/evalscope/pull/734) for comparable metrics. Validate Stage 1/2 RL checkpoints on AIME24, AIME25, GPQA, LiveCodeBench v5 to confirm FP8 inference parity.
 
 Follow this workflow to reproduce the FP8 SFT results from InfiR2 and extend them into the two-stage GRPO RL curriculum with strong efficiency and long-context reasoning performance.
