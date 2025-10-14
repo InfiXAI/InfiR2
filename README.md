@@ -82,7 +82,7 @@ For more details, please refer to [docker/README.md](docker/README.md).
 
 ## 🤖 Continual Pre-training with FP8
 
-We provide continual pre-training (CPT) scripts with FP8 quantization. Our FP8 training recipe achieves **up to 22% reduction in training time**, **14% decrease in peak memory usage**, and **19% increase in throughput** compared to BF16 baseline, while maintaining performance parity on reasoning benchmarks.
+We provide continual pre-training (CPT) scripts with FP8 quantization. Our FP8 training recipe achieves **up to 22% reduction in training time**, **14% decrease in peak memory usage**, and **19% increase in throughput** compared to BF16 baseline, while maintaining performance parity on reasoning benchmarks. For more details, please refer to [docs/Pretrain.md](docs/Pretrain.md)
 
 ### Available Scripts
 
@@ -118,7 +118,6 @@ bash scripts/CPT/InfiR2_CPT_FP8_7B_decay.sh \
     --load exp/InfiR2_CPT_FP8_7B/checkpoints/iter_0035000
 ```
 
-For more details, please refer to [Pretrain.md](docs/Pretrain.md)
 
 ## 🌈 Supervised Fine-tuning with FP8
 
