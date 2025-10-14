@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://arxiv.org/abs/2509.22536">📄 Paper</a> &nbsp; | &nbsp;
   <a href="https://huggingface.co/collections/InfiX-ai/infir2-68edca7ae3c3f052b2db0eed">🤗 Huggingface </a> &nbsp; | &nbsp;
-  <a href="https://infix-ai.com/research/infir2/">🌐 Project Website</a> &nbsp; | &nbsp;
+  <a href="https://infix-ai.com/research/infir2/">🌐 Project Website</a> &nbsp;
 </p>
 
 
