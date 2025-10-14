@@ -149,7 +149,7 @@ ray start --head --node-ip-address ${MASTER_ADDR} --num-gpus 8 --disable-usage-s
 
 Then launch the training:
 ```bash
-bash scripts/SFT/InfiR2_SFT_FP8_stage1.sh
+bash scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh
 ```
 
 ---
