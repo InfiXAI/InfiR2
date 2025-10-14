@@ -15,23 +15,23 @@
 
 <p align="center">
   <a href="https://arxiv.org/abs/2509.22536">📄 Paper</a> &nbsp; | &nbsp;
-  <a href="https://huggingface.co/datasets/ZaynZhu/Paper2Video">🤗 Huggingface </a> &nbsp; | &nbsp;
+  <a href="https://huggingface.co/collections/InfiX-ai/infir2-68edca7ae3c3f052b2db0eed">🤗 Huggingface </a> &nbsp; | &nbsp;
   <a href="https://infix-ai.com/research/infir2/">🌐 Project Website</a> &nbsp; | &nbsp;
 </p>
 
 
 
 ## 🔥 Update
-- [x] [2025.10.8] We release the [code](https://github.com/InfiXAI/InfiR2) and [model](https://huggingface.co/datasets/ZaynZhu/Paper2Video).
+- [x] [2025.10.8] We release the [code](https://github.com/InfiXAI/InfiR2) and [model](https://huggingface.co/collections/InfiX-ai/infir2-68edca7ae3c3f052b2db0eed).
 - [x] [2025.9.26] We release the [arxiv paper](https://arxiv.org/abs/2509.22536).
 
 ---
 
 ### Table of Contents
 - [🌟 Overview](#-overview)
-- [🚀 Preparation]()
-- [🤖 Pretrain with FP8]()
-- [🌈 Supervised with FP8]()
+- [🚀 Preparation](#-preparation)
+- [🤖 Continual Pre-training with FP8](#-continual-pre-training-with-fp8)
+- [🌈 Supervised Fine-tuning with FP8](#-supervised-fine-tuning-with-fp8)
 - [📊 Evaluation](#-evaluation-paper2video)
 - [🙏 Acknowledgements](#-acknowledgements)
 - [📌 Citation](#-citation)
