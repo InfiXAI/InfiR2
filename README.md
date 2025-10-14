@@ -52,26 +52,32 @@ We introduce an end-to-end FP8 training recipe that seamlessly integrates contin
 
 ## 🚀 Preparation
 
+To clone this repository, please use:
+```bash
+git clone --recursive https://github.com/InfiXAI/InfiR2
+```
+
 ### Environment Setup
 
 We support environment setup via **Conda** and **Docker**. Both methods are based on the official setup guide from the [THUDM/slime](https://github.com/THUDM/slime) repository. Please follow the instructions in the links below.
 
 ---
 
-### Option 1: Conda Setup
+### Docker Setup
 
-*   **Instructions**: Please follow the detailed guide at [**THUDM/slime Conda Build Documentation**](https://github.com/THUDM/slime/blob/main/docs/README.md).
+The custom-configured Docker image is stored at [Dockerfile.te_fp8.cu129](docker/Dockerfile.te_fp8.cu129). Using the following code for running docker, 
 
----
-
-### Option 2: Docker Setup
-
-*   **Instructions**: Please refer to the official Docker configuration files and guide at [**THUDM/slime Docker Directory**](https://github.com/THUDM/slime/tree/main/docker).
-
-To clone this repository, please use:
-```bash
-git clone --recursive https://github.com/InfiXAI/InfiR2
+```base
+docker build --no-cache \
+    --file docker/Dockerfile.te_fp8.cu129 \
+    --build-arg HTTP_PROXY="$http_proxy" \
+    --build-arg HTTPS_PROXY="$https_proxy" \
+    --build-arg NO_PROXY="localhost,127.0.0.1" \
+    --build-arg SGLANG_VERSION=${SGLANG_VERSION:-v0.5.0rc0-cu129} \
+    --build-arg MEGATRON_COMMIT=${MEGATRON_COMMIT:-main} \
+    -t infix/te-fp8:cu129 .
 ```
+For more details, please refer to [docker/README.md](docker/README.md).
 
 
 ## 🤖 Continual Pre-training with FP8
@@ -117,6 +123,10 @@ For more details, please refer to [Pretrain.md](docs/Pretrain.md)
 ## 🌈 Supervised Fine-tuning with FP8
 
 We provide two-stage SFT training scripts with FP8 quantization following [InfiAlign](https://arxiv.org/abs/2508.05496). The training process uses Ray for distributed execution and supports multi-node training configurations. For more details, refer to [docs/SFT.md](docs/SFT.md).
+
+### Available Scripts
+
+We support both 7B and 1.5B models with flexible training configurations:
 
 - 7B SFT
   - Stage1: [InfiR2_SFT_FP8_7B_stage1.sh](scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh).

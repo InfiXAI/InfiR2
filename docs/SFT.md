@@ -1,11 +1,34 @@
-## 🤖 FP8 Supervised Fine-tuning
+## 🤖 Supervised Fine-tuning with FP8
 
 ### Overview
-The InfiR2 SFT experiments demonstrate that FP8 supervised fine-tuning matches BF16 loss dynamics on Qwen2.5-Math-1.5B and 7B. Using the InfiAlign-SFT-72k → 165k curriculum yields up to 22% faster training, 14% lower peak memory, and 19% higher throughput. This document distills the full recipe for reproducing those results, with concrete launch plans for single-node and multi-node runs. In practice we train both 1.5B and 7B models on two nodes (8 GPUs per node) and recommend the same setup for best parity with the paper.
+The InfiR2 SFT experiments demonstrate that FP8 supervised fine-tuning matches BF16 loss dynamics on Qwen2.5-Math-1.5B and 7B. Using the InfiAlign-SFT-72k → 165k curriculum yields up to **22% faster training**, **14% lower peak memory**, and **19% higher throughput**. This document distills the full recipe for reproducing those results, with concrete launch plans for single-node and multi-node runs. In practice we train both 1.5B and 7B models on two nodes (8 GPUs per node) and recommend the same setup for best parity with the paper.
 
 ---
 
-### 1. Data & Environment Setup
+### Available Scripts
+
+We support both 7B and 1.5B models with flexible training configurations:
+
+- 7B SFT
+  - Stage1: [InfiR2_SFT_FP8_7B_stage1.sh](scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh).
+  - Stage2: [InfiR2_SFT_FP8_7B_stage2.sh](scripts/SFT/InfiR2_SFT_FP8_7B_stage2.sh).
+- 1.5B SFT
+  - Stage1: [InfiR2_SFT_FP8_1.5B_stage1.sh](scripts/SFT/InfiR2_SFT_FP8_1.5B_stage1.sh).
+  - Stage2: [InfiR2_SFT_FP8_1.5B_stage2.sh](scripts/SFT/InfiR2_SFT_FP8_1.5B_stage2.sh).
+
+
+**Training Strategy Explained:**
+
+The two stage balances data mixing, curriculum-guided SFT, and DPO to boost reasoning across various benchmarks. For more details, please refer to [InfiAlign](https://arxiv.org/abs/2508.05496).
+
+**When to use which script:**
+You can directly run the script on your model. If you want to get the best performance, please run the scripts for stage1 and stage2 in sequence.
+
+### Configuration
+
+The training scripts use Megatron-LM with comprehensive configuration options. Below are the key parameters you need to modify:
+
+#### 1. Data & Environment Setup
 **Datasets**  
 - Stage 1: `InfiAlign-SFT-72k`
 - Stage 2: `InfiAlign-SFT-165k`
@@ -20,20 +43,33 @@ The InfiR2 SFT experiments demonstrate that FP8 supervised fine-tuning matches B
   - Environment variables in `runtime-env-json` for `PYTHONPATH`, NCCL socket interfaces, `CUDA_DEVICE_MAX_CONNECTIONS`, proxy settings, etc.  
   - W&B and TensorBoard configured for offline logging
 
-```bash
-# Example stage configuration (fill in paths for each cluster)
-HOME_DIR=/path/to/slime
-LOG_DIR=/path/to/logs
+```bash 
+# Set your Slime path
+HOME_DIR=/path/to/slime 
+
+# Data paths
 DATA_DIR=/path/to/InfiAlign-SFT-72k      # Swap to -165k for Stage 2
+```
+
+#### 2. Model Settings
+
+HF_CHECKPOINT specifies the path for the model weights, while REF_LOAD specifies the path for the model configuration.
+
+```bash
+# Set your model weight path
 HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B-Instruct/
+
+# Set your model config path
 REF_LOAD=/path/to/base_models_/qwen2.5-7B_torch_dist/
+
+# Set your model load dir
 LOAD_DIR=/path/to/checkpoints/InfiR2_SFT_FP8_7B_stg1/
+
+# Set your outputs path
 SAVE_DIR=/path/to/outputs/InfiR2_SFT_FP8_7B_stg1/
 ```
 
----
-
-### 2. Core Training Recipe
+#### 3. Core Training Recipe
 **Scripts**: `scripts/SFT/InfiR2_SFT_FP8_{model}_stage{1,2}.sh`
 
 ```bash
@@ -58,9 +94,10 @@ Dropout is disabled, gradients and softmax accumulate in FP32, and flash attenti
   - Change `DATA_DIR` to your SFT data
   - Point `REF_LOAD` to the Stage 1 checkpoint if training Stage 2
 
----
 
-### 3. Single-node Launch (8 GPUs)
+### Running the Training 
+
+#### Single-node Launch (8 GPUs)
 Suitable for prototypes or limited hardware. Adjust global batch or sequence length if memory constrained.
 
 ```bash
@@ -85,7 +122,7 @@ bash scripts/SFT/InfiR2_SFT_FP8_7B_stage2.sh \
 
 ---
 
-### 4. Multi-node Launch (Recommended, 2 Nodes × 8 GPUs)
+#### Multi-node Launch (Recommended, 2 Nodes × 8 GPUs)
 Matches the configuration used for both 1.5B and 7B SFT runs in the paper.
 
 ```bash
@@ -114,7 +151,7 @@ Resume: For stage transitions, double-check that `LOAD_DIR` matches the previous
 
 ---
 
-### 5. Monitoring Training
+### Monitoring Training
 
 - **TensorBoard**  
   - Log directory: `${LOG_DIR}/tensorboard/InfiR2-sft-fp8-${MODEL}-stg{1,2}`  
@@ -124,7 +161,7 @@ Resume: For stage transitions, double-check that `LOAD_DIR` matches the previous
 
 ---
 
-### 6. Evaluation
+### Evaluation
 
 Evaluate Stage 1 and Stage 2 outputs on AIME24, AIME25, GPQA, LiveCodeBench v5 (via EvalScope [PR #734](https://github.com/modelscope/evalscope/pull/734)) to confirm FP8 parity with reported metrics.
 

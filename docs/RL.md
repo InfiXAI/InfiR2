@@ -1,16 +1,23 @@
-## 🎯 FP8 Reinforcement Learning (RL)
+## 🎯 Reinforcement Learning (RL) with FP8
 
 ### Overview
 InfiR2 extends FP8 efficiency into reinforcement learning through a two-stage DAPO curriculum. Stage 1 compresses responses to 8k tokens, Stage 2 expands to 16k. Both use FP8 inference (E8M0) for rollouts while keeping DAPO training in BF16. This guide explains data preparation, checkpoint conversion, launch commands for multi-node execution, and monitoring.
 
 ---
 
-### 1. Prerequisites
+### Available Scripts
+
+Nowdays, We release 7B models with flexible training configurations:
+
+- Stage 1: [InfiR2_RL_FP8_7B_stage1_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage1_4node.sh) with 8K response lengths.
+- Stage 2: [InfiR2_RL_FP8_7B_stage2_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh) with 8K response lengths and higher temperature.
+
+### Prerequisites
 - **Upstream SFT checkpoint**: Stage 2 FP8 SFT output (torch distributed) is required.
 - **Converted models**:  
   1. Convert torch checkpoint to HuggingFace format.  
   2. Cast the HF model to FP8 E8M0 for rollout engines.
-- **Datasets**: `dapo-math-17k.jsonl` (curriculum data used in the paper).
+- **Datasets**: `dapo-math-17k.jsonl` (curriculum data used in the training).
 - **Cluster**: Production runs expect four nodes (8 GPUs each) for training *and* dedicated GPUs per rollout engine. Adjust as needed.
 - **Ray**: Head node accessible at `http://${MASTER_ADDR}:8265`, workers joined with identical environment variables.
 
@@ -30,16 +37,29 @@ python tools/bf16_cast_fp8.py \
 
 ---
 
-### 2. Configuration Template
+### Configuration
 Fill the following variables in `scripts/RL/InfiR2_RL_FP8_7B_stage{1,2}_4node.sh`.
 
+#### 1. Environment & Model Configuration
+
 ```bash
+# Set slime path
 HOME_DIR=/path/to/slime
 LOG_DIR=/path/to/logs
+
+# Set your training data path
 DATA_DIR=/path/to/datasets/dapo-math-17k.jsonl
+
+# Set your model weight path
 HF_CHECKPOINT=/path/to/InfiR2_SFT_FP8_stg2_hf_e8m0/
-REF_LOAD=/path/to/InfiR2_SFT_FP8_stg2/            # torch distributed checkpoint
-LOAD_DIR=/path/to/RL_stage1/                      # Stage 1 output (Stage 2 reuses)
+
+# Set your model config path
+REF_LOAD=/path/to/InfiR2_SFT_FP8_stg2/    
+
+# Set your model load dir
+LOAD_DIR=/path/to/RL_stage1/                      
+
+# Set your outputs path
 SAVE_DIR=/path/to/RL_stage1/
 ```
 
@@ -47,7 +67,7 @@ Scripts automatically handle W&B (offline), TensorBoard logging, and Ray runtime
 
 ---
 
-### 3. Stage 1: Compress (8k)
+#### 2. Stage 1: Compress (8k)
 
 ```bash
 ROLLOUT_MAX_LEN=8192                           # Maximum generated tokens
@@ -79,7 +99,7 @@ bash scripts/RL/InfiR2_RL_FP8_7B_stage1_4node.sh \
 
 ---
 
-### 4. Stage 2: Expand (16k)
+#### 3. Stage 2: Expand (16k)
 
 ```bash
 ROLLOUT_MAX_LEN=16384                          # Extended response window
@@ -103,7 +123,7 @@ bash scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh \
 
 ---
 
-### 5. Optimization Details
+#### 4. Optimization Details
 
 ```bash
 ADVANTAGE_ESTIMATOR=grpo                      # Policy-gradient estimator
@@ -121,7 +141,7 @@ When GPU memory is limited or the hardware scale is reduced, reduce `OVER_SAMPLI
 
 ---
 
-### 6. Monitoring 
+### Monitoring 
 
 - **TensorBoard**: `${LOG_DIR}/tensorboard` (enable via `--tensorboard-dir`).  
 - **W&B**: Offline by default. Sync using `wandb sync`.  
