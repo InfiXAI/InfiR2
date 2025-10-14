@@ -7,8 +7,9 @@ The InfiR2 SFT experiments demonstrate that FP8 supervised fine-tuning matches B
 
 ### 1. Data & Environment Setup
 **Datasets**  
-Stage 1: `InfiAlign-SFT-72k`
-Stage 2: `InfiAlign-SFT-165k`
+- Stage 1: `InfiAlign-SFT-72k`
+- Stage 2: `InfiAlign-SFT-165k`
+
 **Context Length**: 32k for both stages.
 - **Checkpoints required**  
   - HuggingFace base model, e.g. Qwen2.5-7B-Instruct  
