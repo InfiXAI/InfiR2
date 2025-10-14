@@ -1,3 +1,3 @@
+# Detail Documentation
 
-内容：
-1. 放一些细节的运行文档，如megatron如何跑，感觉其实也没啥放的
+We have included several documents there, such as details on continue pretraining, supervised fine-tuning, and other related topics.
