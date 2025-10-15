@@ -195,6 +195,7 @@ REF_LOAD=/path/to/base_models_/qwen2.5-7B_torch_dist/
 #### Running
 First, start Ray cluster:
 ```bash
+export MASTER_ADDR=${MASTER_ADDR:-"127.0.0.1"}
 ray start --head --node-ip-address ${MASTER_ADDR} --num-gpus 8 --disable-usage-stats --dashboard-host=0.0.0.0 --dashboard-port=8265
 ```
 

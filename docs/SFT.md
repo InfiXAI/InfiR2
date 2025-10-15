@@ -102,6 +102,7 @@ Suitable for prototypes or limited hardware. Adjust global batch or sequence len
 
 ```bash
 # 7B Stage 1 single-node
+export MASTER_ADDR=${MASTER_ADDR:-"127.0.0.1"}
 ray start --head --node-ip-address ${MASTER_ADDR} --num-gpus 8 \
   --disable-usage-stats --dashboard-host=0.0.0.0 --dashboard-port=8265
 
@@ -127,7 +128,7 @@ Matches the configuration used for both 1.5B and 7B SFT runs in the paper.
 
 ```bash
 # Launch Ray head on Node 1
-MASTER_ADDR=10.0.0.1
+export MASTER_ADDR=${MASTER_ADDR:-"127.0.0.1"}
 ray start --head --node-ip-address ${MASTER_ADDR} --num-gpus 8 \
   --dashboard-host=0.0.0.0 --dashboard-port=8265
 
@@ -137,14 +138,12 @@ ray start --address="http://${MASTER_ADDR}:8265" --num-gpus 8
 # Submit Stage 1 job from Node 1
 bash scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh \
   --actor-num-nodes 2 \
-  --actor-num-gpus-per-node 8 \
-  --rdzv-endpoint ${MASTER_ADDR}:29400
+  --actor-num-gpus-per-node 8
 
 # Submit Stage 2 job using Stage 1 checkpoint as REF_LOAD
 bash scripts/SFT/InfiR2_SFT_FP8_7B_stage2.sh \
   --actor-num-nodes 2 \
-  --actor-num-gpus-per-node 8 \
-  --rdzv-endpoint ${MASTER_ADDR}:29400
+  --actor-num-gpus-per-node 8
 ```
 
 Resume: For stage transitions, double-check that `LOAD_DIR` matches the previous stage’s final checkpoint path.

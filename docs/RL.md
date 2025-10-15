@@ -87,16 +87,16 @@ Training and rollout processes use four nodes × eight GPUs. Reward modeling rel
 
 ```bash
 # Launch Ray cluster (example with four nodes)
-MASTER_ADDR=10.0.0.1
+export MASTER_ADDR=${MASTER_ADDR:-"127.0.0.1"}
 ray start --head --node-ip-address ${MASTER_ADDR} --num-gpus 8 \
   --dashboard-host=0.0.0.0 --dashboard-port=8265
-ray start --address="http://${MASTER_ADDR}:8265" --num-gpus 8
+
+ray start --address="${MASTER_ADDR}:8265" --num-gpus 8
 
 # Submit Stage 1
 bash scripts/RL/InfiR2_RL_FP8_7B_stage1_4node.sh \
   --actor-num-nodes 4 \
-  --actor-num-gpus-per-node 8 \
-  --rdzv-endpoint ${MASTER_ADDR}:29400
+  --actor-num-gpus-per-node 8
 ```
 
 ---
