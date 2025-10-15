@@ -1,6 +1,11 @@
 [submodule "third_party/Megatron-LM"]
-	path = third_party/megatron
+	path = third_party/Megatron-LM
 	url = https://github.com/NVIDIA/Megatron-LM.git
+	branch = core_v0.14.0
 [submodule "third_party/TransformerEngine"]
-	path = third_party/transformer_engine
+	path = third_party/TransformerEngine
 	url = https://github.com/NVIDIA/TransformerEngine.git
+	# commit = 3cd6870 (v2.4.0)
+[submodule "third_party/slime"]
+	path = third_party/slime
+	url = https://github.com/THUDM/slime.git
