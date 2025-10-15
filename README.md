@@ -188,7 +188,7 @@ python tools/bf16_cast_fp8.py \
 The FP8 E8M0 model will be used for inference during the RL rollout phase, significantly improving generation efficiency.
 
 - Stage 1: [InfiR2_RL_FP8_7B_stage1_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage1_4node.sh) with 8K response lengths.
-- Stage 2: [InfiR2_RL_FP8_7B_stage2_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh) with 8K response lengths and higher temperature.
+- Stage 2: [InfiR2_RL_FP8_7B_stage2_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh) with 16K response lengths and higher temperature.
 
 #### Configuration
 
@@ -202,8 +202,9 @@ DATA_DIR=/path/to/data/dapo-math-17k.jsonl
 - `REF_LOAD`: Path to the SFT Stage 2 checkpoint in PyTorch distributed format
 
 ```bash
-HF_CHECKPOINT=/path/to/InfiR2_SFT_FP8_stg2_hf_e8m0/
-REF_LOAD=/path/to/InfiR2_SFT_FP8_stg2/
+HF_CHECKPOINT=/path/to/your_model/
+
+REF_LOAD=/path/to/your_model/
 ```
 
 #### Running 
