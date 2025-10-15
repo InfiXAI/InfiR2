@@ -394,7 +394,12 @@ Each script uses slurm for job scheduling and SGLang for efficient inference ser
 
 ## 🙏 Acknowledgements
 
-* We would like to express our gratitude for the following open-source projects: [Slime](https://github.com/THUDM/slime), [Megatron](https://github.com/NVIDIA/Megatron-LM), [TransformerEngine](https://github.com/NVIDIA/TransformerEngine) and [Qwen2.5](https://github.com/QwenLM/Qwen2.5-Math)。
+We would like to express our gratitude for the following open-source projects:
+
+* **[slime](https://github.com/THUDM/slime)** - An LLM post-training framework for RL scaling that powers GLM-4.5 and GLM-4.6. slime supports training for nearly all models compatible with Megatron-LM. We are actively collaborating with the slime community to achieve fully training-inference consistent FP8 RL training.
+* **[Megatron-LM](https://github.com/NVIDIA/Megatron-LM)** - Large-scale transformer model training framework by NVIDIA.
+* **[TransformerEngine](https://github.com/NVIDIA/TransformerEngine)** - Library for accelerating transformer models on NVIDIA GPUs with FP8 precision.
+* **[Qwen2.5](https://github.com/QwenLM/Qwen2.5-Math)** - Foundation models that inspired our work.
 
 ---
 
