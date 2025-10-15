@@ -1,6 +1,5 @@
 ARG SGLANG_VERSION=latest
-# you can build this docker through docker/Dockerfile.sglang.cu129
-FROM infix/sglang:cu129-latest AS sglang
+FROM lmsysorg/sglang:${SGLANG_VERSION} AS sglang
 
 # we need to write this again after from
 ARG SGLANG_VERSION
@@ -37,23 +36,12 @@ RUN python_path=`python3 -c "import site; print(site.getsitepackages()[0])"` && 
 
 
 WORKDIR /root/
-RUN git clone -b v0.0.1-fp8  https://github.com/InfiXAI/Megatron-LM.git --recursive && \
+RUN git clone -b core_v0.14.0  https://github.com/NVIDIA/Megatron-LM.git --recursive && \
     cd Megatron-LM && \
     pip install -e .
 
-# sandwitch norm for GLM models
-COPY patch/te_fp8/megatron.patch /root/Megatron-LM/
-RUN cd Megatron-LM && \
-    git checkout ${MEGATRON_COMMIT} && \
-    git apply megatron.patch --3way && \
-    if grep -R -n '^<<<<<<< ' .; then \
-      echo "Patch failed to apply cleanly. Please resolve conflicts." && \
-      exit 1; \
-    fi && \
-    rm megatron.patch
-
 # sglang patch
-COPY patch/te_fp8/sglang.patch /sgl-workspace/sglang/
+COPY patch/${SGLANG_VERSION}/sglang.patch /sgl-workspace/sglang/
 RUN cd /sgl-workspace/sglang && \
   git apply sglang.patch && \
   if grep -R -n '^<<<<<<< ' .; then \
