@@ -9,8 +9,8 @@ InfiR2 extends FP8 efficiency into reinforcement learning through a two-stage DA
 
 Nowdays, We release 7B models with flexible training configurations:
 
-- Stage 1: [InfiR2_RL_FP8_7B_stage1_4node.sh](https://github.com/InfiXAI/InfiR2/blob/main/scripts/RL/InfiR2_RL_FP8_7B_stage1_4node.sh) with 8K response lengths.
-- Stage 2: [InfiR2_RL_FP8_7B_stage2_4node.sh](https://github.com/InfiXAI/InfiR2/blob/main/scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh) with 16K response lengths and higher temperature.
+- Stage 1: [InfiR2_RL_FP8_7B_stage1_4node.sh](../scripts/RL/InfiR2_RL_FP8_7B_stage1_4node.sh) with 8K response lengths.
+- Stage 2: [InfiR2_RL_FP8_7B_stage2_4node.sh](../scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh) with 16K response lengths and higher temperature.
 
 ### Prerequisites
 - **Upstream SFT checkpoint**: Stage 2 FP8 SFT output (torch distributed) is required.
