@@ -56,10 +56,10 @@ DATA_DIR=/path/to/InfiAlign-SFT-72k      # Swap to -165k for Stage 2
 HF_CHECKPOINT specifies the path for the model weights, while REF_LOAD specifies the path for the model configuration.
 
 ```bash
-# Set your model weight path
+# Set your model config path
 HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B-Instruct/
 
-# Set your model config path
+# Set your model weight path
 REF_LOAD=/path/to/base_models_/qwen2.5-7B_torch_dist/
 
 # Set your model load dir

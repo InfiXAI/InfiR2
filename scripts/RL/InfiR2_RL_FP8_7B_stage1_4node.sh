@@ -13,8 +13,8 @@ LOG_DIR=/path/to/wandb_log_dir/
 LOAD_DIR=/path/to/load_dir_stg1_RL8k/
 SAVE_DIR=/path/to/save_dir_stg1_RL8k/
 DATA_DIR=/path/to/data/dapo-math-17k.jsonl
-HF_CHECKPOINT=/path/to/models_FP8_config_hf/InfiR2_SFT_FP8_stg2_hf__e8m0/
-REF_LOAD=/path/to/models_torch_dist/InfiR2-SFT-FP8-stg2/
+HF_CHECKPOINT=/path/to/models_FP8_config_hf/your_model/
+REF_LOAD=/path/to/models_torch_dist/your_model/
 # ==============================================================
 
 # ================ paralle config ==============================

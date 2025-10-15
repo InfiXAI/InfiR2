@@ -10,7 +10,7 @@ InfiR2 extends FP8 efficiency into reinforcement learning through a two-stage DA
 Nowdays, We release 7B models with flexible training configurations:
 
 - Stage 1: [InfiR2_RL_FP8_7B_stage1_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage1_4node.sh) with 8K response lengths.
-- Stage 2: [InfiR2_RL_FP8_7B_stage2_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh) with 8K response lengths and higher temperature.
+- Stage 2: [InfiR2_RL_FP8_7B_stage2_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh) with 16K response lengths and higher temperature.
 
 ### Prerequisites
 - **Upstream SFT checkpoint**: Stage 2 FP8 SFT output (torch distributed) is required.
@@ -42,6 +42,10 @@ Fill the following variables in `scripts/RL/InfiR2_RL_FP8_7B_stage{1,2}_4node.sh
 
 #### 1. Environment & Model Configuration
 
+**Model Configuration:**
+- `HF_CHECKPOINT`: Path to the FP8 E8M0 converted model (for inference)
+- `REF_LOAD`: Path to the SFT Stage 2 checkpoint in PyTorch distributed format
+
 ```bash
 # Set slime path
 HOME_DIR=/path/to/slime
@@ -50,11 +54,9 @@ LOG_DIR=/path/to/logs
 # Set your training data path
 DATA_DIR=/path/to/datasets/dapo-math-17k.jsonl
 
-# Set your model weight path
-HF_CHECKPOINT=/path/to/InfiR2_SFT_FP8_stg2_hf_e8m0/
+HF_CHECKPOINT=/path/to/your_model/
 
-# Set your model config path
-REF_LOAD=/path/to/InfiR2_SFT_FP8_stg2/    
+REF_LOAD=/path/to/your_model/    
 
 # Set your model load dir
 LOAD_DIR=/path/to/RL_stage1/                      
