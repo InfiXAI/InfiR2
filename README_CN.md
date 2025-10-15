@@ -1,4 +1,5 @@
 # InfiR2
+[English](./README.md)
 
 <p align="center">
   <b>InfiR2: A Comprehensive FP8 Training Recipe for Reasoning-Enhanced Language Models</b>
@@ -40,13 +41,56 @@
 我们引入了一种端到端的 FP8 训练方案，该方案无缝集成了持续预训练和监督微调。我们的方法采用了一种细粒度的混合粒度量化策略，以在保持数值保真度的同时最大化计算效率。通过广泛的实验，包括在 160B token 语料库上对模型进行持续预训练，我们证明了我们的方案不仅非常稳定，而且基本上是无损的，在一系列推理基准上实现了与 BF16 基线相当的性能。至关重要的是，这是在显著提高效率的情况下实现的，包括高达 22% 的训练时间减少、14% 的峰值内存使用量降低和 19% 的吞吐量提升。我们的结果证实了 FP8 能够作为 BF16 的一个实用且稳健的替代方案，我们发布了完整的配套代码以进一步普及大规模模型训练。
 
 <div align="center">
-  <img src="assets/fp8_recipe.png" alt="我们的方法" width="100%">
+  <img src="assets/fp8_recipe.png" alt="我们的方法" width="90%">
+</div>
+
+---
+
+- **显存优化与加速.** 与广泛使用的 BF16 精度相比，FP8 能够提供:
+  - 端到端训练速度提升高达 22%。
+  - 峰值内存使用量节省高达 14%。
+  - 端到端吞吐量提升高达 19%。
+
+  Model Size = 1.5B
+
+
+  <div align="center">
+
+  **Context Length = 32k, TP = 2, CP = 1, MBS = 1**
+  |      | Forward | Backward | Total | Ratio | Peak Memory | Ratio | Throughput | Ratio |
+  | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+  | BF16 | 841 ms | 2329 ms | 3170 ms | - | 57.8 GB | - | 345 TFlops | - |
+  | FP8  | 875 ms | 2075 ms | 2950 ms | 0.93× | 51.7 GB | 0.89× | 360 TFlops | 1.04× |
+
+  **Context Length = 8k, TP = 1, CP = 1, MBS = 2**
+  |      | Forward | Backward | Total | Ratio | Peak Memory | Ratio | Throughput | Ratio |
+  | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+  | BF16 | 463 ms | 1567 ms | 2030 ms | - | 68.1 GB | - | 340 TFlops | - |
+  | FP8  | 529 ms | 1061 ms | 1590 ms | 0.78× | 58.3 GB | 0.86× | 376 TFlops | 1.10× |
+
+  </div>
+
+
+  Model Size = 7B
+
+<div align="center">
+
+**Context Length = 32k, TP = 4, CP = 1, MBS = 1**
+|      | Forward | Backward | Total | Ratio | Peak Memory | Ratio | Throughput | Ratio |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| BF16 | 2790 ms | 6800 ms | 9590 ms | - | 78.1 GB | - | 409 TFlops | - |
+| FP8  | 2660 ms | 5700 ms | 8360 ms | 0.87× | 67.4 GB | 0.86× | 461 TFlops | 1.14× |
+
+**Context Length = 32k, TP = 2, CP = 1, MBS = 1**
+|      | Forward | Backward | Total | Ratio | Peak Memory | Ratio | Throughput | Ratio |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| BF16 | 1760 ms | 5320 ms | 7080 ms | - | 53.2 GB | - | 453 TFlops | - |
+| FP8  | 2300 ms | 3230 ms | 5530 ms | 0.78× | 50.8 GB | 0.95× | 537 TFlops | 1.19× |
+	
 </div>
 
 
-
-
-## 🚀 准备工作
+## 🚀 环境准备
 
 为了拉取此仓库，请使用：
 ```bash
@@ -55,7 +99,7 @@ git clone --recursive https://github.com/InfiXAI/InfiR2
 
 ### 环境设置
 
-我们支持通过 **Conda** 和 **Docker** 进行环境配置。两种方法都基于 [THUDM/slime](https://github.com/THUDM/slime) 仓库的官方设置指南。详情请参照链接中的说明。
+我们支持通过 **Docker** 进行环境配置，并提供**自定义 Docker 文件**。详情请参照以下说明：
 
 ### Docker 设置
 
@@ -230,6 +274,7 @@ pip install -e .
 ### 评测基准
 
 我们为四个关键的推理基准提供了评测脚本：
+<div align="center">
 
 | 基准 | 脚本 | 最大 Tokens | 样本数 | 温度系数 |
 |-----------|--------|------------|---------|-------------|
@@ -238,12 +283,96 @@ pip install -e .
 | GPQA | [gpqa_eval.sh](scripts/eval/gpqa_eval.sh) | 26,000 | 8 | 0.65 |
 | LiveCodeBench | [livecodebenchv5_eval.sh](scripts/eval/livecodebenchv5_eval.sh) | 27,000 | 8 | 0.65 |
 
-### 运行评测
+</div>
 
 每个脚本都使用 slurm 进行作业调度，并使用 SGLang 提供高效的推理服务。评测流程包括：
 
 1. 使用模型启动一个 SGLang 服务
 2. 运行 evalscope 并指定相应的基准测试
+
+### 模型表现
+- 7B模型
+
+<div align="center">
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Model</th>
+      <th align="center">AIME 25</th>
+      <th align="center">AIME 24</th>
+      <th align="center">GPQA</th>
+      <th align="center">LiveCodeBench v5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left"><strong>Deepseek-Distill-Qwen-7B</strong></td>
+      <td align="center">43.00</td>
+      <td align="center">49.00</td>
+      <td align="center">48.20</td>
+      <td align="center">37.60</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Qwen2.5-7B-base (w. InfiAlign)</strong></td>
+      <td align="center">33.75</td>
+      <td align="center">43.02</td>
+      <td align="center">48.11</td>
+      <td align="center">39.48</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>InfiR2-7B-Instruct-FP8</strong></td>
+      <td align="center">40.62</td>
+      <td align="center">55.73</td>
+      <td align="center">45.33</td>
+      <td align="center">40.31</td>
+    </tr>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+
+- 1.5B模型
+<div align="center">
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Model</th>
+      <th align="center">AIME 25</th>
+      <th align="center">AIME 24</th>
+      <th align="center">GPQA</th>
+      <th align="center">LiveCodeBench v5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left"><strong>Deepseek-Distill-Qwen-1.5B</strong></td>
+      <td align="center">21.35</td>
+      <td align="center">26.87</td>
+      <td align="center">32.26</td>
+      <td align="center">18.50</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Qwen2.5-1.5B-base (w. InfiAlign)</strong></td>
+      <td align="center">14.58</td>
+      <td align="center">10.52</td>
+      <td align="center">28.98</td>
+      <td align="center">12.99</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>InfiR2-1.5B-Instruct-FP8</strong></td>
+      <td align="center">18.45</td>
+      <td align="center">17.39</td>
+      <td align="center">29.48</td>
+      <td align="center">17.10</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
 
 ## 🙏 致谢
 

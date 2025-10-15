@@ -1,5 +1,5 @@
 # InfiR2
-
+[中文版](./README_CN.md)
 
 <p align="center">
   <b>InfiR2: A Comprehensive FP8 Training Recipe for Reasoning-Enhanced Language Models</b>
@@ -18,7 +18,6 @@
   <a href="https://huggingface.co/collections/InfiX-ai/infir2-68edca7ae3c3f052b2db0eed">🤗 Huggingface </a> &nbsp; | &nbsp;
   <a href="https://infix-ai.com/research/infir2/">🌐 Project Website</a> &nbsp;
 </p>
-
 
 
 ## 🔥 Update
@@ -44,10 +43,53 @@
 We introduce an end-to-end FP8 training recipe that seamlessly integrates continual pre-training and supervised fine-tuning. Our methodology employs a fine-grained, hybrid-granularity quantization strategy to maintain numerical fidelity while maximizing computational efficiency. Through extensive experiments, including the continue pre-training of models on a 160B-token corpus, we demonstrate that our recipe is not only remarkably stable but also essentially lossless, achieving performance on par with the BF16 baseline across a suite of reasoning benchmarks. Crucially, this is achieved with substantial efficiency improvements, including up to a 22% reduction in training time, a 14% decrease in peak memory usage, and a 19% increase in throughput. Our results establish FP8 as a practical and robust alternative to BF16, and we release the accompanying code to further democratize large-scale model training.
 
 <div align="center">
-  <img src="assets/fp8_recipe.png" alt="Our approach" width="100%">
+  <img src="assets/fp8_recipe.png" alt="Our approach" width="90%">
 </div>
 
+---
 
+- **Memory optimization and Speed up.** Memory Optimization & Computation Acceleration: Compared to the widely used BF16, FP8 delivers:
+	- Up to 22% increase in end-to-end training speed.
+	- Up to 14% savings in peak memory usage.
+	- Up to 19% increase in end-to-end throughput.
+
+  Model Size = 1.5B
+
+
+  <div align="center">
+
+  **Context Length = 32k, TP = 2, CP = 1, MBS = 1**
+  |      | Forward | Backward | Total | Ratio | Peak Memory | Ratio | Throughput | Ratio |
+  | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+  | BF16 | 841 ms | 2329 ms | 3170 ms | - | 57.8 GB | - | 345 TFlops | - |
+  | FP8  | 875 ms | 2075 ms | 2950 ms | 0.93× | 51.7 GB | 0.89× | 360 TFlops | 1.04× |
+
+  **Context Length = 8k, TP = 1, CP = 1, MBS = 2**
+  |      | Forward | Backward | Total | Ratio | Peak Memory | Ratio | Throughput | Ratio |
+  | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+  | BF16 | 463 ms | 1567 ms | 2030 ms | - | 68.1 GB | - | 340 TFlops | - |
+  | FP8  | 529 ms | 1061 ms | 1590 ms | 0.78× | 58.3 GB | 0.86× | 376 TFlops | 1.10× |
+
+  </div>
+
+
+  Model Size = 7B
+
+  <div align="center">
+
+  **Context Length = 32k, TP = 4, CP = 1, MBS = 1**
+  |      | Forward | Backward | Total | Ratio | Peak Memory | Ratio | Throughput | Ratio |
+  | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+  | BF16 | 2790 ms | 6800 ms | 9590 ms | - | 78.1 GB | - | 409 TFlops | - |
+  | FP8  | 2660 ms | 5700 ms | 8360 ms | 0.87× | 67.4 GB | 0.86× | 461 TFlops | 1.14× |
+
+  **Context Length = 32k, TP = 2, CP = 1, MBS = 1**
+  |      | Forward | Backward | Total | Ratio | Peak Memory | Ratio | Throughput | Ratio |
+  | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+  | BF16 | 1760 ms | 5320 ms | 7080 ms | - | 53.2 GB | - | 453 TFlops | - |
+  | FP8  | 2300 ms | 3230 ms | 5530 ms | 0.78× | 50.8 GB | 0.95× | 537 TFlops | 1.19× |
+    
+  </div>
 
 
 ## 🚀 Preparation
@@ -59,7 +101,7 @@ git clone --recursive https://github.com/InfiXAI/InfiR2
 
 ### Environment Setup
 
-We support environment setup via **Conda** and **Docker**. Both methods are based on the official setup guide from the [THUDM/slime](https://github.com/THUDM/slime) repository. Please follow the instructions in the links below.
+We support the environment setup **Docker and provide the custom docker file**. Please follow the instructions below.
 
 ---
 
@@ -238,6 +280,8 @@ pip install -e .
 
 ### Evaluation Benchmarks
 
+<div align="center">
+
 We provide evaluation scripts for four key reasoning benchmarks:
 
 | Benchmark | Script | Max Tokens | Samples | Temperature |
@@ -247,12 +291,97 @@ We provide evaluation scripts for four key reasoning benchmarks:
 | GPQA | [gpqa_eval.sh](scripts/eval/gpqa_eval.sh) | 26,000 | 8 | 0.65 |
 | LiveCodeBench | [livecodebenchv5_eval.sh](scripts/eval/livecodebenchv5_eval.sh) | 27,000 | 8 | 0.65 |
 
-### Running Evaluations
+</div>
 
 Each script uses slurm for job scheduling and SGLang for efficient inference serving. The evaluation pipeline consists of:
 
 1. Starting an SGLang server with the model
 2. Running evalscope with the specified benchmark
+
+### Model Performance
+
+- 7B Model
+
+<div align="center">
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Model</th>
+      <th align="center">AIME 25</th>
+      <th align="center">AIME 24</th>
+      <th align="center">GPQA</th>
+      <th align="center">LiveCodeBench v5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left"><strong>Deepseek-Distill-Qwen-7B</strong></td>
+      <td align="center">43.00</td>
+      <td align="center">49.00</td>
+      <td align="center">48.20</td>
+      <td align="center">37.60</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Qwen2.5-7B-base (w. InfiAlign)</strong></td>
+      <td align="center">33.75</td>
+      <td align="center">43.02</td>
+      <td align="center">48.11</td>
+      <td align="center">39.48</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>InfiR2-7B-Instruct-FP8</strong></td>
+      <td align="center">40.62</td>
+      <td align="center">55.73</td>
+      <td align="center">45.33</td>
+      <td align="center">40.31</td>
+    </tr>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+
+- 1.5B Model
+<div align="center">
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Model</th>
+      <th align="center">AIME 25</th>
+      <th align="center">AIME 24</th>
+      <th align="center">GPQA</th>
+      <th align="center">LiveCodeBench v5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left"><strong>Deepseek-Distill-Qwen-1.5B</strong></td>
+      <td align="center">21.35</td>
+      <td align="center">26.87</td>
+      <td align="center">32.26</td>
+      <td align="center">18.50</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Qwen2.5-1.5B-base (w. InfiAlign)</strong></td>
+      <td align="center">14.58</td>
+      <td align="center">10.52</td>
+      <td align="center">28.98</td>
+      <td align="center">12.99</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>InfiR2-1.5B-Instruct-FP8</strong></td>
+      <td align="center">18.45</td>
+      <td align="center">17.39</td>
+      <td align="center">29.48</td>
+      <td align="center">17.10</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
 
 ## 🙏 Acknowledgements
 
