@@ -107,18 +107,26 @@ We support the environment setup **Docker and provide the custom docker file**. 
 
 ### Docker Setup
 
-The custom-configured Docker image is stored at [Dockerfile.te_fp8.cu129](docker/Dockerfile.te_fp8.cu129). Using the following code for running docker, 
+The custom-configured Docker image is stored at [Dockerfile](docker/Dockerfile). Build the Docker image using:
 
-```base
+```bash
 docker build --no-cache \
-    --file docker/Dockerfile.te_fp8.cu129 \
+    --file docker/Dockerfile \
     --build-arg HTTP_PROXY="$http_proxy" \
     --build-arg HTTPS_PROXY="$https_proxy" \
     --build-arg NO_PROXY="localhost,127.0.0.1" \
-    --build-arg SGLANG_VERSION=${SGLANG_VERSION:-v0.5.0rc0-cu129} \
+    --build-arg SGLANG_VERSION=${SGLANG_VERSION:-latest} \
     --build-arg MEGATRON_COMMIT=${MEGATRON_COMMIT:-main} \
-    -t infix/te-fp8:cu129 .
+    -t infir2-training:latest .
 ```
+
+**Key Components:**
+- **Base**: `lmsysorg/sglang:${SGLANG_VERSION}`
+- **Megatron-LM**: core_v0.14.0 branch (NVIDIA official)
+- **TransformerEngine**: v2.4.0 (commit 3cd6870) - ⚠️ Must use this version to avoid precision/gpu memory issues
+- **FlashAttention**: v2.7.4.post1 + Hopper build
+- **Additional**: slime, mbridge, torch_memory_saver, ray, sglang-router, and more
+
 For more details, please refer to [docker/README.md](docker/README.md).
 
 

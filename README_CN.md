@@ -103,18 +103,26 @@ git clone --recursive https://github.com/InfiXAI/InfiR2
 
 ### Docker 设置
 
-自定义配置的 Docker 镜像存储在 [Dockerfile.te_fp8.cu129](docker/Dockerfile.te_fp8.cu129)。使用以下代码运行 docker，
+自定义配置的 Docker 镜像存储在 [Dockerfile](docker/Dockerfile)。使用以下代码构建 Docker 镜像：
 
-```base
+```bash
 docker build --no-cache \
-    --file docker/Dockerfile.te_fp8.cu129 \
+    --file docker/Dockerfile \
     --build-arg HTTP_PROXY="$http_proxy" \
     --build-arg HTTPS_PROXY="$https_proxy" \
     --build-arg NO_PROXY="localhost,127.0.0.1" \
-    --build-arg SGLANG_VERSION=${SGLANG_VERSION:-v0.5.0rc0-cu129} \
+    --build-arg SGLANG_VERSION=${SGLANG_VERSION:-latest} \
     --build-arg MEGATRON_COMMIT=${MEGATRON_COMMIT:-main} \
-    -t infix/te-fp8:cu129 .
+    -t infir2-training:latest .
 ```
+
+**主要组件：**
+- **基础镜像**: `lmsysorg/sglang:${SGLANG_VERSION}`
+- **Megatron-LM**: core_v0.14.0 分支（NVIDIA 官方版本）
+- **TransformerEngine**: v2.4.0（commit 3cd6870）- ⚠️ 必须使用此版本以避免精度/显存问题
+- **FlashAttention**: v2.7.4.post1 + Hopper 构建
+- **其他组件**: slime、mbridge、torch_memory_saver、ray、sglang-router 等
+
 更多详情，请参考 [docker/README.md](docker/README.md)。
 
 
