@@ -33,7 +33,6 @@
 - [🙏 致谢](#-致谢)
 - [📌 引用](#-引用)
 
----
 
 ## 🌟 概述
 
@@ -57,8 +56,6 @@ git clone --recursive https://github.com/InfiXAI/InfiR2
 ### 环境设置
 
 我们支持通过 **Conda** 和 **Docker** 进行环境设置。两种方法都基于 [THUDM/slime](https://github.com/THUDM/slime) 仓库的官方设置指南。请遵循以下链接中的说明。
-
----
 
 ### Docker 设置
 
@@ -157,8 +154,6 @@ ray start --head --node-ip-address ${MASTER_ADDR} --num-gpus 8 --disable-usage-s
 bash scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh
 ```
 
----
-
 ## 🎯 FP8 强化学习
 
 我们的 RL 训练流程包含两个阶段：首先压缩响应长度，然后扩展它。在开始 RL 训练之前，您需要将 SFT 检查点转换为 FP8 E8M0 格式，以便在生成 rollout 阶段进行高效的 FP8 推理。更多详情，请参考 [docs/RL.md](docs/RL.md)。
@@ -254,7 +249,6 @@ pip install -e .
 
 * 我们在此对以下开源项目表示诚挚的感谢：[Slime](https://github.com/THUDM/slime)、[Megatron](https://github.com/NVIDIA/Megatron-LM)、[TransformerEngine](https://github.com/NVIDIA/TransformerEngine) 和 [Qwen2.5](https://github.com/QwenLM/Qwen2.5-Math)。
 
----
 
 ## 📌 引用
 
@@ -271,5 +265,4 @@ pip install -e .
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2509.22536}, 
 }
-```
 ```
