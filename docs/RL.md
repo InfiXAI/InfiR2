@@ -27,7 +27,7 @@ PYTHONPATH=training/Megatron-LM:training/slime \
 python tools/convert_torch_dist_to_hf.py \
   --input-dir /path/to/InfiR2_SFT_FP8_stg2 \
   --output-dir /path/to/InfiR2_SFT_FP8_stg2_hf \
-  --origin-hf-dir /path/to/models/Qwen2.5-7B
+  --origin-hf-dir /path/to/models/Qwen2.5-7B-Instruct
 
 python tools/bf16_cast_fp8.py \
   --input-bf16-hf-path /path/to/InfiR2_SFT_FP8_stg2_hf \

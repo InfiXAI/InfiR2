@@ -60,7 +60,7 @@ HF_CHECKPOINT specifies the path for the model weights, while REF_LOAD specifies
 HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B-Instruct/
 
 # Set your model weight path
-REF_LOAD=/path/to/base_models_/qwen2.5-7B_torch_dist/
+REF_LOAD=/path/to/base_models_/InfiR2_CPT_FP8_7B_torch_dist/
 
 # Set your model load dir
 LOAD_DIR=/path/to/checkpoints/InfiR2_SFT_FP8_7B_stg1/
