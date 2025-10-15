@@ -41,7 +41,7 @@
 ## 🌟 Overview
 
 
-We introduce an end-to-end FP8 training recipe that seamlessly integrates continual pre-training and supervised fine-tuning. Our methodology employs a fine-grained, hybrid-granularity quantization strategy to maintain numerical fidelity while maximizing computational efficiency. Through extensive experiments, including the continue pre-training of models on a 160B-token corpus, we demonstrate that our recipe is not only remarkably stable but also essentially lossless, achieving performance on par with the BF16 baseline across a suite of reasoning benchmarks. Crucially, this is achieved with substantial efficiency improvements, including up to a 22% reduction in training time, a 14% decrease in peak memory usage, and a 19% increase in throughput. Our results establish FP8 as a practical and robust alternative to BF16, and we will release the accompanying code to further democratize large-scale model training.
+We introduce an end-to-end FP8 training recipe that seamlessly integrates continual pre-training and supervised fine-tuning. Our methodology employs a fine-grained, hybrid-granularity quantization strategy to maintain numerical fidelity while maximizing computational efficiency. Through extensive experiments, including the continue pre-training of models on a 160B-token corpus, we demonstrate that our recipe is not only remarkably stable but also essentially lossless, achieving performance on par with the BF16 baseline across a suite of reasoning benchmarks. Crucially, this is achieved with substantial efficiency improvements, including up to a 22% reduction in training time, a 14% decrease in peak memory usage, and a 19% increase in throughput. Our results establish FP8 as a practical and robust alternative to BF16, and we release the accompanying code to further democratize large-scale model training.
 
 <div align="center">
   <img src="assets/fp8_recipe.png" alt="Our approach" width="100%">
@@ -142,12 +142,12 @@ DATA_DIR=/path/to/stage1_data
 ```
 
 **Model Configuration:**
-- `HF_CHECKPOINT`: Path to the base model in HuggingFace format (e.g., Qwen2.5-7B)
+- `HF_CHECKPOINT`: Path to the model in HuggingFace format (e.g., Qwen2.5-7B-Instruct)
 - `REF_LOAD`: Path to the base model weights in PyTorch distributed format
 
 
 ```bash
-HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B/
+HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B-Instruct/
 REF_LOAD=/path/to/base_models_/qwen2.5-7B_torch_dist/
 ```
 #### Running
@@ -176,7 +176,7 @@ After completing SFT Stage 2, convert the model to HuggingFace format, then to F
 PYTHONPATH=training/Megatron-LM:training/slime python tools/convert_torch_dist_to_hf.py \
     --input-dir /path/to/InfiR2_SFT_FP8_stg2 \
     --output-dir /path/to/InfiR2_SFT_FP8_stg2_hf \
-    --origin-hf-dir /path/to/models/Qwen2.5-7B
+    --origin-hf-dir /path/to/models/Qwen2.5-7B-Instruct
 
 # Step 2: Convert BF16 HuggingFace model to FP8 E8M0 format
 python tools/bf16_cast_fp8.py \

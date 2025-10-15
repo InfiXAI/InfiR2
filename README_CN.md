@@ -37,7 +37,7 @@
 ## 🌟 概述
 
 
-我们引入了一种端到端的 FP8 训练方案，该方案无缝集成了持续预训练和监督微调。我们的方法采用了一种细粒度的混合粒度量化策略，以在保持数值保真度的同时最大化计算效率。通过广泛的实验，包括在 160B token 语料库上对模型进行持续预训练，我们证明了我们的方案不仅非常稳定，而且基本上是无损的，在一系列推理基准上实现了与 BF16 基线相当的性能。至关重要的是，这是在显著提高效率的情况下实现的，包括高达 22% 的训练时间减少、14% 的峰值内存使用量降低和 19% 的吞吐量提升。我们的结果确立了 FP8 作为 BF16 的一个实用且稳健的替代方案，并且我们将发布配套代码以进一步普及大规模模型训练。
+我们引入了一种端到端的 FP8 训练方案，该方案无缝集成了持续预训练和监督微调。我们的方法采用了一种细粒度的混合粒度量化策略，以在保持数值保真度的同时最大化计算效率。通过广泛的实验，包括在 160B token 语料库上对模型进行持续预训练，我们证明了我们的方案不仅非常稳定，而且基本上是无损的，在一系列推理基准上实现了与 BF16 基线相当的性能。至关重要的是，这是在显著提高效率的情况下实现的，包括高达 22% 的训练时间减少、14% 的峰值内存使用量降低和 19% 的吞吐量提升。我们的结果证实了 FP8 能够作为 BF16 的一个实用且稳健的替代方案，我们发布了完整的配套代码以进一步普及大规模模型训练。
 
 <div align="center">
   <img src="assets/fp8_recipe.png" alt="我们的方法" width="100%">
@@ -55,7 +55,7 @@ git clone --recursive https://github.com/InfiXAI/InfiR2
 
 ### 环境设置
 
-我们支持通过 **Conda** 和 **Docker** 进行环境设置。两种方法都基于 [THUDM/slime](https://github.com/THUDM/slime) 仓库的官方设置指南。请遵循以下链接中的说明。
+我们支持通过 **Conda** 和 **Docker** 进行环境配置。两种方法都基于 [THUDM/slime](https://github.com/THUDM/slime) 仓库的官方设置指南。详情请参照链接中的说明。
 
 ### Docker 设置
 
@@ -93,7 +93,7 @@ docker build --no-cache \
 
 **选项 1: 完整训练流程 (推荐)**
 
-一次性运行完整的预热+稳定+衰减训练：
+一次性运行完整的预热+稳定+退火训练：
 
 ```bash
 bash scripts/CPT/InfiR2_CPT_FP8_7B.sh
@@ -101,20 +101,20 @@ bash scripts/CPT/InfiR2_CPT_FP8_7B.sh
 
 这个脚本将自动完成所有三个训练阶段。
 
-**选项 2: 使用独立的衰减脚本 (高级)**
+**选项 2: 使用独立的退火脚本 (高级)**
 
-如果您想从稳定阶段的某个特定检查点进入衰减阶段：
+如果您想从稳定阶段的某个特定检查点进入退火阶段：
 
 ```bash
 # 首先，确定您在稳定阶段的检查点
-# 然后使用该检查点运行衰减脚本
+# 然后使用该检查点运行退火脚本
 bash scripts/CPT/InfiR2_CPT_FP8_7B_decay.sh \
     --load exp/InfiR2_CPT_FP8_7B/checkpoints/iter_0035000```
 ```
 
 ## 🌈 FP8 监督微调
 
-我们提供了遵循 [InfiAlign](https://arxiv.org/abs/2508.05496) 论文，使用 FP8 量化的两阶段 SFT 训练脚本。训练过程使用 Ray 进行分布式执行，并支持多节点训练配置。更多详情，请参考 [docs/SFT.md](docs/SFT.md)。
+我们提供了遵循 [InfiAlign](https://arxiv.org/abs/2508.05496) 论文，进行 FP8 量化的两阶段 SFT 训练。训练过程使用 Ray 进行分布式执行，并支持多节点训练配置。更多详情，请参考 [docs/SFT.md](docs/SFT.md)。
 
 ### 可用脚本
 
@@ -135,12 +135,12 @@ DATA_DIR=/path/to/stage1_data
 ```
 
 **模型配置:**
-- `HF_CHECKPOINT`: 指向 HuggingFace 格式的基础模型路径 (例如 Qwen2.5-7B)
+- `HF_CHECKPOINT`: 指向 HuggingFace 格式的模型路径 (例如 Qwen2.5-7B-Instruct)
 - `REF_LOAD`: 指向 PyTorch 分布式格式的基础模型权重路径
 
 
 ```bash
-HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B/
+HF_CHECKPOINT=/path/to/base_models_hf/qwen2.5-7B-Instruct/
 REF_LOAD=/path/to/base_models_/qwen2.5-7B_torch_dist/
 ```
 #### 运行
@@ -167,7 +167,7 @@ bash scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh
 PYTHONPATH=training/Megatron-LM:training/slime python tools/convert_torch_dist_to_hf.py \
     --input-dir /path/to/InfiR2_SFT_FP8_stg2 \
     --output-dir /path/to/InfiR2_SFT_FP8_stg2_hf \
-    --origin-hf-dir /path/to/models/Qwen2.5-7B
+    --origin-hf-dir /path/to/models/Qwen2.5-7B-Instruct
 
 # 步骤 2: 将 BF16 格式的 HuggingFace 模型转换为 FP8 E8M0 格式
 python tools/bf16_cast_fp8.py \
@@ -179,7 +179,7 @@ python tools/bf16_cast_fp8.py \
 转换后的 FP8 E8M0 模型将用于 RL 的 rollout 阶段的推理，从而显著提升生成效率。
 
 - 阶段一: [InfiR2_RL_FP8_7B_stage1_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage1_4node.sh)，响应长度为 8K。
-- 阶段二: [InfiR2_RL_FP8_7B_stage2_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh)，响应长度为 16K，并使用更高的温度系数。
+- 阶段二: [InfiR2_RL_FP8_7B_stage2_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh)，响应长度为 16K，并使用更高的温度。
 
 #### 配置
 
