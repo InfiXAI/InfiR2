@@ -128,7 +128,14 @@ Do not upgrade TransformerEngine beyond v2.4.0 unless you have thoroughly tested
 
 ## Acknowledgements
 
-This Docker build configuration is largely inspired by and based on the excellent work from the [**slime**](https://github.com/THUDM/slime) project by THUDM. slime is an LLM post-training framework for RL scaling that powers GLM-4.5 and GLM-4.6. We are grateful to the slime team for their contributions to the open-source community.
+This Docker build configuration is largely inspired by and based on the excellent work from the [**slime**](https://github.com/THUDM/slime) project by THUDM. slime is an LLM post-training framework for RL scaling that powers GLM-4.5 and GLM-4.6. 
+
+**About slime:**
+- slime supports training for nearly all models compatible with Megatron-LM, not just GLM series models
+- We are actively collaborating with the slime community to achieve fully training-inference consistent FP8 RL training
+- The latest slime Docker images typically support all training recipes in this repository
+
+We are grateful to the slime team for their contributions to the open-source community.
 
 If you encounter any issues with the SGLang patches or the Docker build process, please don't hesitate to [open an issue](https://github.com/InfiXAI/InfiR2/issues) in our repository. We are committed to addressing and fixing any problems promptly.
 

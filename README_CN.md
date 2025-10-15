@@ -385,7 +385,12 @@ pip install -e .
 
 ## 🙏 致谢
 
-* 我们在此对以下开源项目表示诚挚的感谢：[Slime](https://github.com/THUDM/slime)、[Megatron](https://github.com/NVIDIA/Megatron-LM)、[TransformerEngine](https://github.com/NVIDIA/TransformerEngine) 和 [Qwen2.5](https://github.com/QwenLM/Qwen2.5-Math)。
+我们在此对以下开源项目表示诚挚的感谢：
+
+* **[slime](https://github.com/THUDM/slime)** - 用于 RL 扩展的大语言模型后训练框架，支持 GLM-4.5 和 GLM-4.6 的训练。slime 支持几乎所有与 Megatron-LM 兼容的模型训练。我们正在与 slime 社区积极合作，致力于实现完全训推一致的 FP8 RL 训练。
+* **[Megatron-LM](https://github.com/NVIDIA/Megatron-LM)** - NVIDIA 开发的大规模 transformer 模型训练框架。
+* **[TransformerEngine](https://github.com/NVIDIA/TransformerEngine)** - 用于在 NVIDIA GPU 上加速 transformer 模型的 FP8 精度库。
+* **[Qwen2.5](https://github.com/QwenLM/Qwen2.5-Math)** - 启发我们工作的基础模型。
 
 
 ## 📌 引用
