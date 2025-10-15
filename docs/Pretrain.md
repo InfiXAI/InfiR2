@@ -8,10 +8,10 @@ We support both 7B and 1.5B models with flexible training configurations:
 
 - **7B Model**
   - Complete Training: [InfiR2_CPT_FP8_7B.sh](../scripts/CPT/InfiR2_CPT_FP8_7B.sh) - Full warmup+stable+decay pipeline
-  - Decay Only: [InfiR2_CPT_FP8_7B_decay.sh](scripts/CPT/InfiR2_CPT_FP8_7B_decay.sh) - Optional standalone decay phase
+  - Decay Only: [InfiR2_CPT_FP8_7B_decay.sh](../scripts/CPT/InfiR2_CPT_FP8_7B_decay.sh) - Optional standalone decay phase
 - **1.5B Model**
-  - Complete Training: [InfiR2_CPT_FP8_1.5B.sh](scripts/CPT/InfiR2_CPT_FP8_1.5B.sh) - Full warmup+stable+decay pipeline
-  - Decay Only: [InfiR2_CPT_FP8_1.5B_decay.sh](scripts/CPT/InfiR2_CPT_FP8_1.5B_decay.sh) - Optional standalone decay phase
+  - Complete Training: [InfiR2_CPT_FP8_1.5B.sh](../scripts/CPT/InfiR2_CPT_FP8_1.5B.sh) - Full warmup+stable+decay pipeline
+  - Decay Only: [InfiR2_CPT_FP8_1.5B_decay.sh](../scripts/CPT/InfiR2_CPT_FP8_1.5B_decay.sh) - Optional standalone decay phase
 
 **Training Strategy Explained:**
 
