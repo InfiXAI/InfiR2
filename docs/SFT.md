@@ -10,11 +10,11 @@ The InfiR2 SFT experiments demonstrate that FP8 supervised fine-tuning matches B
 We support both 7B and 1.5B models with flexible training configurations:
 
 - 7B SFT
-  - Stage1: [InfiR2_SFT_FP8_7B_stage1.sh](scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh).
-  - Stage2: [InfiR2_SFT_FP8_7B_stage2.sh](scripts/SFT/InfiR2_SFT_FP8_7B_stage2.sh).
+  - Stage1: [InfiR2_SFT_FP8_7B_stage1.sh](https://github.com/InfiXAI/InfiR2/blob/main/scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh).
+  - Stage2: [InfiR2_SFT_FP8_7B_stage2.sh](https://github.com/InfiXAI/InfiR2/blob/main/scripts/SFT/InfiR2_SFT_FP8_7B_stage2.sh).
 - 1.5B SFT
-  - Stage1: [InfiR2_SFT_FP8_1.5B_stage1.sh](scripts/SFT/InfiR2_SFT_FP8_1.5B_stage1.sh).
-  - Stage2: [InfiR2_SFT_FP8_1.5B_stage2.sh](scripts/SFT/InfiR2_SFT_FP8_1.5B_stage2.sh).
+  - Stage1: [InfiR2_SFT_FP8_1.5B_stage1.sh](https://github.com/InfiXAI/InfiR2/blob/main/scripts/SFT/InfiR2_SFT_FP8_1.5B_stage1.sh).
+  - Stage2: [InfiR2_SFT_FP8_1.5B_stage2.sh](https://github.com/InfiXAI/InfiR2/blob/main/scripts/SFT/InfiR2_SFT_FP8_1.5B_stage2.sh).
 
 
 **Training Strategy Explained:**
