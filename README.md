@@ -83,7 +83,7 @@ We introduce an end-to-end FP8 training recipe that seamlessly integrates contin
   | BF16 | 2790 ms | 6800 ms | 9590 ms | - | 78.1 GB | - | 409 TFlops | - |
   | FP8  | 2660 ms | 5700 ms | 8360 ms | 0.87× | 67.4 GB | 0.86× | 461 TFlops | 1.14× |
 
-  **Context Length = 32k, TP = 2, CP = 1, MBS = 1**
+  **Context Length = 8k, TP = 2, CP = 1, MBS = 1**
   |      | Forward | Backward | Total | Ratio | Peak Memory | Ratio | Throughput | Ratio |
   | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
   | BF16 | 1760 ms | 5320 ms | 7080 ms | - | 53.2 GB | - | 453 TFlops | - |
