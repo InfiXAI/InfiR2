@@ -1,7 +1,7 @@
 ## 🎯 Reinforcement Learning (RL) with FP8
 
 ### Overview
-InfiR2 extends FP8 efficiency into reinforcement learning through a two-stage DAPO curriculum. Stage 1 compresses responses to 8k tokens, Stage 2 expands to 16k. Both use FP8 inference (E8M0) for rollouts while keeping DAPO training in BF16. This guide explains data preparation, checkpoint conversion, launch commands for multi-node execution, and monitoring.
+InfiR2 extends FP8 efficiency into reinforcement learning through a two-stage DAPO curriculum. Stage 1 compresses responses to 8k tokens, Stage 2 expands to 16k. Both use FP8 inference for rollouts while keeping DAPO training in BF16. This guide explains data preparation, checkpoint conversion, launch commands for multi-node execution, and monitoring.
 
 ---
 
@@ -16,7 +16,7 @@ Nowdays, We release 7B models with flexible training configurations:
 - **Upstream SFT checkpoint**: Stage 2 FP8 SFT output (torch distributed) is required.
 - **Converted models**:  
   1. Convert torch checkpoint to HuggingFace format.  
-  2. Cast the HF model to FP8 E8M0 for rollout engines.
+  2. Cast the HF model to FP8 for rollout engines.
 - **Datasets**: `dapo-math-17k.jsonl` (curriculum data used in the training).
 - **Cluster**: Production runs expect four nodes (8 GPUs each) for training *and* dedicated GPUs per rollout engine. Adjust as needed.
 - **Ray**: Head node accessible at `http://${MASTER_ADDR}:8265`, workers joined with identical environment variables.
@@ -31,8 +31,8 @@ python tools/convert_torch_dist_to_hf.py \
 
 python tools/bf16_cast_fp8.py \
   --input-bf16-hf-path /path/to/InfiR2_SFT_FP8_stg2_hf \
-  --output-fp8-hf-path /path/to/InfiR2_SFT_FP8_stg2_hf_e8m0 \
-  --force-pow-2-scale True
+  --output-fp8-hf-path /path/to/InfiR2_SFT_FP8_stg2_hf_fp8 \
+  --force-pow-2-scale False
 ```
 
 ---
@@ -43,7 +43,7 @@ Fill the following variables in `scripts/RL/InfiR2_RL_FP8_7B_stage{1,2}_4node.sh
 #### 1. Environment & Model Configuration
 
 **Model Configuration:**
-- `HF_CHECKPOINT`: Path to the FP8 E8M0 converted model (for inference)
+- `HF_CHECKPOINT`: Path to the FP8 converted model (for inference)
 - `REF_LOAD`: Path to the SFT Stage 2 checkpoint in PyTorch distributed format
 
 ```bash
