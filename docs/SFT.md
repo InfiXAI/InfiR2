@@ -1,7 +1,7 @@
 ## 🤖 Supervised Fine-tuning with FP8
 
 ### Overview
-The InfiR2 SFT experiments demonstrate that FP8 supervised fine-tuning matches BF16 loss dynamics on Qwen2.5-Math-1.5B and 7B. Using the InfiAlign-SFT-72k → 165k curriculum yields up to **22% faster training**, **14% lower peak memory**, and **19% higher throughput**. This document distills the full recipe for reproducing those results, with concrete launch plans for single-node and multi-node runs. In practice we train both 1.5B and 7B models on two nodes (8 GPUs per node) and recommend the same setup for best parity with the paper.
+The InfiR2 SFT experiments demonstrate that FP8 supervised fine-tuning matches BF16 loss dynamics on Qwen2.5-Math-1.5B and 7B by using the InfiAlign-SFT-72k → 165k curriculum. This document distills the full recipe for reproducing those results, with concrete launch plans for single-node and multi-node runs. In practice we train both 1.5B and 7B models on two nodes (8 GPUs per node) and recommend the same setup for best parity with the paper.
 
 ---
 
