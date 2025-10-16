@@ -132,7 +132,7 @@ For more details, please refer to [docker/README.md](docker/README.md).
 
 ## 🤖 Continual Pre-training with FP8
 
-We provide continual pre-training (CPT) scripts with FP8 quantization. Our FP8 training recipe achieves **up to 22% reduction in training time**, **14% decrease in peak memory usage**, and **19% increase in throughput** compared to BF16 baseline, while maintaining performance parity on reasoning benchmarks. For more details, please refer to [docs/Pretrain.md](docs/Pretrain.md)
+We provide continual pre-training (CPT) scripts with FP8 quantization. Our FP8 training recipe achieves **up to 22% reduction in training time**, **14% decrease in peak memory usage**, and **19% increase in throughput** compared to BF16 baseline, while maintaining performance parity on reasoning benchmarks. For more details, please refer to [docs/CPT.md](docs/CPT.md)
 
 ### Available Scripts
 
@@ -216,11 +216,11 @@ bash scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh
 
 ## 🎯 Reinforcement Learning with FP8
 
-Our RL training pipeline consists of two stages: first compressing the response length, then expanding it. Before RL training, you need to convert the SFT checkpoint to FP8 E8M0 format for efficient FP8 inference during rollout generation. For more details, refer to [docs/RL.md](docs/RL.md).
+Our RL training pipeline consists of two stages: first compressing the response length, then expanding it. Before RL training, you need to convert the SFT checkpoint to FP8 format for efficient FP8 inference during rollout generation. For more details, refer to [docs/RL.md](docs/RL.md).
 
 ### Model Conversion for RL
 
-After completing SFT Stage 2, convert the model to HuggingFace format, then to FP8 E8M0 format:
+After completing SFT Stage 2, convert the model to HuggingFace format, then to FP8 format:
 
 ```bash
 # Step 1: Convert PyTorch distributed checkpoint to HuggingFace format
@@ -229,14 +229,14 @@ PYTHONPATH=training/Megatron-LM:training/slime python tools/convert_torch_dist_t
     --output-dir /path/to/InfiR2_SFT_FP8_stg2_hf \
     --origin-hf-dir /path/to/models/Qwen2.5-7B-Instruct
 
-# Step 2: Convert BF16 HuggingFace model to FP8 E8M0 format
+# Step 2: Convert BF16 HuggingFace model to FP8 format
 python tools/bf16_cast_fp8.py \
     --input-bf16-hf-path /path/to/InfiR2_SFT_FP8_stg2_hf \
-    --output-fp8-hf-path /path/to/InfiR2_SFT_FP8_stg2_hf_e8m0 \
-    --force-pow-2-scale True
+    --output-fp8-hf-path /path/to/InfiR2_SFT_FP8_stg2_hf_fp8 \
+    --force-pow-2-scale False
 ```
 
-The FP8 E8M0 model will be used for inference during the RL rollout phase, significantly improving generation efficiency.
+The FP8 model will be used for inference during the RL rollout phase, significantly improving generation efficiency.
 
 - Stage 1: [InfiR2_RL_FP8_7B_stage1_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage1_4node.sh) with 8K response lengths.
 - Stage 2: [InfiR2_RL_FP8_7B_stage2_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh) with 16K response lengths and higher temperature.
@@ -249,7 +249,7 @@ DATA_DIR=/path/to/data/dapo-math-17k.jsonl
 ```
 
 **Model Configuration:**
-- `HF_CHECKPOINT`: Path to the FP8 E8M0 converted model (for inference)
+- `HF_CHECKPOINT`: Path to the FP8 converted model (for inference)
 - `REF_LOAD`: Path to the SFT Stage 2 checkpoint in PyTorch distributed format
 
 ```bash
