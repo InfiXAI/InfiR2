@@ -128,7 +128,7 @@ docker build --no-cache \
 
 ## 🤖 FP8 持续预训练
 
-我们提供了使用 FP8 量化的持续预训练 (CPT) 脚本。我们的 FP8 训练方案与 BF16 基线相比，实现了**高达 22% 的训练时间减少**、**14% 的峰值内存使用量降低**以及**19% 的吞吐量提升**，同时在推理基准上保持了相当的性能。更多详情，请参考 [docs/Pretrain.md](docs/Pretrain.md)
+我们提供了使用 FP8 量化的持续预训练 (CPT) 脚本。我们的 FP8 训练方案与 BF16 基线相比，实现了**高达 22% 的训练时间减少**、**14% 的峰值内存使用量降低**以及**19% 的吞吐量提升**，同时在推理基准上保持了相当的性能。更多详情，请参考 [docs/CPT.md](docs/CPT.md)
 
 ### 可用脚本
 
@@ -209,11 +209,11 @@ bash scripts/SFT/InfiR2_SFT_FP8_7B_stage1.sh
 
 ## 🎯 FP8 强化学习
 
-我们的 RL 训练流程包含两个阶段：首先压缩响应长度，然后扩展它。在开始 RL 训练之前，您需要将 SFT 检查点转换为 FP8 E8M0 格式，以便在生成 rollout 阶段进行高效的 FP8 推理。更多详情，请参考 [docs/RL.md](docs/RL.md)。
+我们的 RL 训练流程包含两个阶段：首先压缩响应长度，然后扩展它。在开始 RL 训练之前，您需要将 SFT 检查点转换为 FP8 格式，以便在生成 rollout 阶段进行高效的 FP8 推理。更多详情，请参考 [docs/RL.md](docs/RL.md)。
 
 ### 用于 RL 的模型转换
 
-完成 SFT 阶段二后，请先将模型转换为 HuggingFace 格式，然后再转换为 FP8 E8M0 格式：
+完成 SFT 阶段二后，请先将模型转换为 HuggingFace 格式，然后再转换为 FP8 格式：
 
 ```bash
 # 步骤 1: 将 PyTorch 分布式检查点转换为 HuggingFace 格式
@@ -222,14 +222,14 @@ PYTHONPATH=training/Megatron-LM:training/slime python tools/convert_torch_dist_t
     --output-dir /path/to/InfiR2_SFT_FP8_stg2_hf \
     --origin-hf-dir /path/to/models/Qwen2.5-7B-Instruct
 
-# 步骤 2: 将 BF16 格式的 HuggingFace 模型转换为 FP8 E8M0 格式
+# 步骤 2: 将 BF16 格式的 HuggingFace 模型转换为 FP8 格式
 python tools/bf16_cast_fp8.py \
     --input-bf16-hf-path /path/to/InfiR2_SFT_FP8_stg2_hf \
-    --output-fp8-hf-path /path/to/InfiR2_SFT_FP8_stg2_hf_e8m0 \
-    --force-pow-2-scale True
+    --output-fp8-hf-path /path/to/InfiR2_SFT_FP8_stg2_hf_fp8 \
+    --force-pow-2-scale False
 ```
 
-转换后的 FP8 E8M0 模型将用于 RL 的 rollout 阶段的推理，从而显著提升生成效率。
+转换后的 FP8 模型将用于 RL 的 rollout 阶段的推理，从而显著提升生成效率。
 
 - 阶段一: [InfiR2_RL_FP8_7B_stage1_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage1_4node.sh)，响应长度为 8K。
 - 阶段二: [InfiR2_RL_FP8_7B_stage2_4node.sh](scripts/RL/InfiR2_RL_FP8_7B_stage2_4node.sh)，响应长度为 16K，并使用更高的温度。
@@ -242,7 +242,7 @@ DATA_DIR=/path/to/data/dapo-math-17k.jsonl
 ```
 
 **模型配置:**
-- `HF_CHECKPOINT`: 指向转换后的 FP8 E8M0 模型路径 (用于推理)
+- `HF_CHECKPOINT`: 指向转换后的 FP8 模型路径 (用于推理)
 - `REF_LOAD`: 指向 SFT 阶段二的 PyTorch 分布式格式检查点路径
 
 ```bash
