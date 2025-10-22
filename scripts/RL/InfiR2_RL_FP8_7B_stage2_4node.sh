@@ -103,6 +103,8 @@ GRPO_ARGS=(
    --entropy-coef 0.00
    --eps-clip 0.2
    --eps-clip-high 0.28
+
+   --use-tis
 )
 
 OPTIMIZER_ARGS=(
@@ -142,9 +144,10 @@ MISC_ARGS=(
 PRECISE_ARGS=(
    --transformer-impl transformer_engine
    --bf16
-   #--fp8-format e4m3
-   #--fp8-recipe blockwise
-   #--fp8-param-gather
+   # for fp8 training
+   --fp8-format e4m3
+   --fp8-recipe blockwise
+   --fp8-param-gather
    # --direct-update-fp8-weight
 )
 
@@ -166,11 +169,12 @@ ray job submit --address="http://127.0.0.1:8265" \
         "env_vars": {
             "PYTHONPATH": "/root/Megatron-LM/:/root/slime",
             "CUDA_DEVICE_MAX_CONNECTIONS": "1",
-            "PYTORCH_CUDA_ALLOC_CONF": "max_split_size_mb:1024",
+            "PYTORCH_CUDA_ALLOC_CONF": "max_split_size_mb:2048",
             "TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD": "1",
             "TORCH_NCCL_AVOID_RECORD_STREAMS": "1",
             "NVTE_ALLOW_NONDETERMINISTIC_ALGO": "1",
             "NVTE_DEBUG": "0",
+            "NVTE_FP8_BLOCK_SCALING_FP32_SCALES": "1",
             "HOME": "/root/slime",
             "http_proxy": "",
             "https_proxy": "",
