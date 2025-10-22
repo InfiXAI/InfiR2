@@ -65,6 +65,24 @@ LOAD_DIR=/path/to/RL_stage1/
 SAVE_DIR=/path/to/RL_stage1/
 ```
 
+**FP8 Training Configuration:**
+```bash
+GRPO_ARGS=(
+   ...
+   --use-tis
+   ...
+)
+
+PRECISE_ARGS=(
+   ...
+   # for fp8 training
+   --fp8-format e4m3
+   --fp8-recipe blockwise
+   --fp8-param-gather
+   ...
+)
+```
+
 Scripts automatically handle W&B (offline), TensorBoard logging, and Ray runtime environment variables.
 
 ---

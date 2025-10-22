@@ -258,6 +258,25 @@ HF_CHECKPOINT=/path/to/your_model/
 REF_LOAD=/path/to/your_model/
 ```
 
+**FP8 Training Configuration:**
+```bash
+GRPO_ARGS=(
+   ...
+   --use-tis
+   ...
+)
+
+PRECISE_ARGS=(
+   ...
+   # for fp8 training
+   --fp8-format e4m3
+   --fp8-recipe blockwise
+   --fp8-param-gather
+   ...
+)
+```
+
+
 #### Running 
 The way to launch RL training is the same as SFT. First start ray and then run the script.
 
